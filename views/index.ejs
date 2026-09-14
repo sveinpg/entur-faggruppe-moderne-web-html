@@ -16,8 +16,6 @@
 
     <ul aria-label="Todos" class="todos">
     <% todos.forEach(todo => { %>
-        <% const confirmDeleteId = `confirm-delete-${todo.id}`; %>
-
         <li class="todo" style="view-transition-name: todo-<%= todo.id %>">
             <details name="example">
                 <summary>
@@ -28,16 +26,16 @@
                     </form>
                 </summary>
 
-                <button command="show-modal" commandfor="<%= confirmDeleteId %>">Delete</button>
+                <button command="show-modal" commandfor="confirm-delete-<%= todo.id %>">Delete</button>
 
-                <dialog id="<%= confirmDeleteId %>">
+                <dialog id="confirm-delete-<%= todo.id %>">
                     <h2>Please confirm</h2>
 
                     <form method="POST" action="/todo/<%= todo.id %>/delete">
                         <p>Are you sure you wish to delete this todo?</p>
 
                         <div class="dialog-actions">
-                            <button type="button" command="close" commandfor="<%= confirmDeleteId %>">Cancel</button>
+                            <button type="button" command="close" commandfor="confirm-delete-<%= todo.id %>">Cancel</button>
                             <button type="submit">Delete</button>
                         </div>
                     </form>
