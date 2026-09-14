@@ -160,3 +160,12 @@ dialog::backdrop {
   border-radius: 0.5rem;
   padding: 0.5rem 0.75rem;
 }
+
+/* Holdeplass 10: filtrering, lest fra toppen av dokumentet */
+body:has(#filter-active:checked) .todo:has(input[type="checkbox"]:checked) {
+  display: none;
+}
+
+body:has(#filter-done:checked) .todo:not(:has(input[type="checkbox"]:checked)) {
+  display: none;
+}
