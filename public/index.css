@@ -89,3 +89,20 @@ button {
   color: gray;
   font-size: 0.9rem;
 }
+
+/* Holdeplass 6: ulik overgang for nye og slettede todos */
+@keyframes slide-in {
+  from { opacity: 0; transform: translateX(-2rem); }
+}
+
+@keyframes fade-out {
+  to { opacity: 0; transform: translateX(2rem) scale(0.9); }
+}
+
+::view-transition-new(*):only-child {
+  animation: slide-in 300ms ease-out;
+}
+
+::view-transition-old(*):only-child {
+  animation: fade-out 250ms ease-in;
+}
