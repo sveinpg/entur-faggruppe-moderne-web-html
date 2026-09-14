@@ -120,3 +120,31 @@ button {
     translate: 0 -1rem;
   }
 }
+
+/* Holdeplass 8: dialogen */
+dialog {
+  border: none;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  opacity: 1;
+  scale: 1;
+  transition: opacity 200ms, scale 200ms, display 200ms allow-discrete,
+              overlay 200ms allow-discrete;
+}
+
+dialog:not(:open) {
+  opacity: 0;
+  scale: 0.95;
+}
+
+@starting-style {
+  dialog:open {
+    opacity: 0;
+    scale: 0.95;
+  }
+}
+
+dialog::backdrop {
+  background: rgb(0 0 0 / 0.4);
+  backdrop-filter: blur(2px);
+}
