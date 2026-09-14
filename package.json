@@ -1,0 +1,18 @@
+{
+  "name": "entur-faggruppe-moderne-web-html",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Todo-app workshop: hvor langt kommer vi med kun HTML og CSS?",
+  "type": "module",
+  "scripts": {
+    "start": "nodemon server.js",
+    "serve": "node server.js"
+  },
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}

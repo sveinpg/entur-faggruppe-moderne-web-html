@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Todornaut</title>
+    <link rel="stylesheet" type="text/css" href="/static/index.css" />
+</head>
+<body>
+    <h1>Todornaut</h1>
+
+    <form method="POST" action="/todo">
+        <fieldset role="group">
+            <input placeholder="New todo" name="description" autocomplete="off" required autofocus />
+            <input type="submit" value="Submit" />
+        </fieldset>
+    </form>
+
+    <ul aria-label="Todos" class="todos">
+    <% todos.forEach(todo => { %>
+        <% const confirmDeleteId = `confirm-delete-${todo.id}`; %>
+
+        <li class="todo" style="view-transition-name: todo-<%= todo.id %>">
+            <details name="example">
+                <summary>
+                    <form method="POST" action="/todo/<%= todo.id %>/toggle" class="toggle-form">
+                        <input name="checked" type="checkbox" <%= todo.completed ? "checked" : "" %> />
+                        <input type="submit" value="Toggle" />
+                        <span class="description"><%= todo.description %></span>
+                    </form>
+                </summary>
+
+                <button command="show-modal" commandfor="<%= confirmDeleteId %>">Delete</button>
+
+                <dialog id="<%= confirmDeleteId %>">
+                    <article>
+                        <h2>Please confirm</h2>
+                        <form method="POST" action="/todo/<%= todo.id %>/delete">
+                            <p>Are you sure you wish to delete this todo?</p>
+                            <footer>
+                                <fieldset class="grid">
+                                    <button type="button" command="close" commandfor="<%= confirmDeleteId %>">Cancel</button>
+                                    <button type="submit">Delete</button>
+                                </fieldset>
+                            </footer>
+                        </form>
+                    </article>
+                </dialog>
+            </details>
+        </li>
+    <% }); %>
+    </ul>
+</body>
+</html>
