@@ -69,3 +69,23 @@ button {
   text-decoration: line-through;
   color: gray;
 }
+
+/* Holdeplass 5: tell de som gjenstår */
+.todos {
+  counter-reset: remaining;
+}
+
+.todo {
+  counter-increment: remaining;
+}
+
+.todo:has(input:checked) {
+  counter-increment: remaining 0;
+}
+
+.todos::after {
+  content: counter(remaining) " gjenstår";
+  display: block;
+  color: gray;
+  font-size: 0.9rem;
+}
