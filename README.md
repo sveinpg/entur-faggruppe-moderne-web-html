@@ -112,9 +112,19 @@ Serveren er ferdig og venter. Den har fire ruter, og alle er allerede koblet opp
 Det som mangler er HTML-en som snakker med dem. I `views/index.ejs` står det tre kommentarer der
 markupen skal inn — én per holdeplass i denne etappen.
 
-> 💡 **EJS på 20 sekunder:** `<%= uttrykk %>` skriver ut en verdi, `<% kode %>` kjører JavaScript
-> **på serveren**. Løkka som rendrer todos er allerede skrevet. Alt annet du legger inn er vanlig
-> HTML.
+> 💡 **Har du ikke sett EJS før?**
+>
+> Det er en **templatemotor**: en HTML-fil med hull i, som serveren fyller ut før siden sendes.
+> Ingen bygging, ingen kompilering — serveren leser fila på hver forespørsel. `views/index.ejs`
+> er vanlig HTML bortsett fra to tagger:
+>
+> - `<%= verdi %>` skriver ut en verdi. Den escaper også innholdet, så en todo som heter
+>   `<script>` blir stående som tekst.
+> - `<% kode %>` kjører JavaScript **på serveren** — som løkka rundt todoene. Den er allerede
+>   skrevet for deg, og den er den eneste du trenger.
+>
+> Du trenger ikke lære EJS for å gjøre denne workshopen. Du skriver HTML, og setter inn
+> `<%= todo.id %>` der en id skal stå.
 
 ---
 
