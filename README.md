@@ -41,9 +41,6 @@ npm start
 CSS-en du skal jobbe i ligger i **`public/index.css`**. `npm start` bruker nodemon, så serveren
 restarter når du endrer filer — CSS-endringer trenger bare en refresh.
 
-<sub>Trenger du oversikten over ruter og filer? Den ligger i
-[🗺️ Kart over prosjektet](#️-kart-over-prosjektet) nederst.</sub>
-
 ---
 
 ## 🛤️ Ruta
