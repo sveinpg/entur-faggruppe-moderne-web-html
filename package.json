@@ -2,7 +2,7 @@
   "name": "entur-faggruppe-moderne-web-html",
   "version": "1.0.0",
   "private": true,
-  "description": "Rutine — workshop om hvor langt man kommer med kun HTML og CSS",
+  "description": "Rutine \u2014 workshop om hvor langt man kommer med kun HTML og CSS",
   "type": "module",
   "scripts": {
     "start": "nodemon server.js",
@@ -14,5 +14,8 @@
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }

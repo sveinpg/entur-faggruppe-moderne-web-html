@@ -24,14 +24,15 @@ appen, så alt som gjør den fin.
 
 ## 🚀 Kom i gang
 
-> ⚠️ **Sjekk nettleseren din først:** **Chrome 135+**, **Safari 26+** eller **Firefox 140+**.
-> Er du i tvil, kjør Chrome.
+> ⚠️ **Bruk Chrome 135+.** Det er den eneste nettleseren der hele workshopen virker.
 >
-> Særlig `command`/`commandfor` er ferskt. På en eldre nettleser skjer det rett og slett
-> ingenting når du trykker Delete, og holdeplass 3 faller sammen.
+> Firefox mangler to av tingene vi skal leke med: **cross-document view transitions**
+> (holdeplass 6) og **scroll-drevne animasjoner** (holdeplass 11). Begge feiler stille — siden
+> fungerer, men du ser ingen effekt og tror du har gjort feil. Safari 26+ skal ha begge, men er
+> ikke testet her.
 >
-> Alt bortsett fra holdeplass 11 virker i alle tre. **Scroll-drevne animasjoner finnes ennå ikke
-> i Firefox** — den holdeplassen krever Chrome eller Safari.
+> Uansett nettleser: den må være ny. `command`/`commandfor` er ferskt, og på en eldre nettleser
+> skjer det rett og slett ingenting når du trykker Slett — da faller holdeplass 3 sammen.
 
 ```bash
 git clone git@github.com:sveinpg/entur-faggruppe-moderne-web-html.git
@@ -387,7 +388,8 @@ serveren teller for deg.
 ```
 
 Det gjør at hver navigasjon — også form-posten og redirecten etterpå — animeres i stedet for å
-blinke. Hver `<li>` har `view-transition-name: todo-<id>`, så nettleseren kan matche samme todo
+blinke. ⚠️ **Dette er en av de to holdeplassene som ikke virker i Firefox** — regelen blir
+ignorert der. Bruk Chrome. Hver `<li>` har `view-transition-name: todo-<id>`, så nettleseren kan matche samme todo
 på tvers av sidelastninger.
 
 **🎯 Oppgave:** Utforsk hva som allerede skjer, og tilpass animasjonene. Gi nye og slettede todos
