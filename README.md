@@ -29,6 +29,9 @@ appen, så alt som gjør den fin.
 >
 > Særlig `command`/`commandfor` er ferskt. På en eldre nettleser skjer det rett og slett
 > ingenting når du trykker Delete, og holdeplass 3 faller sammen.
+>
+> Alt bortsett fra holdeplass 11 virker i alle tre. **Scroll-drevne animasjoner finnes ennå ikke
+> i Firefox** — den holdeplassen krever Chrome eller Safari.
 
 ```bash
 git clone git@github.com:sveinpg/entur-faggruppe-moderne-web-html.git
@@ -731,6 +734,8 @@ faktisk scroller først.
 - Animasjonen må ha `animation-name` og `animation-duration: auto` — varigheten styres av
   tidslinjen, ikke av klokka.
 - ♿ Pakk inn i `@supports (animation-timeline: view())` og respekter `prefers-reduced-motion`.
+- ⚠️ **Firefox støtter ikke dette ennå.** `@supports`-guarden gjør at siden fortsatt fungerer,
+  men du ser ingen effekt. Bytt til Chrome på denne holdeplassen.
 - ⚠️ `animation: … both` låser `opacity` og `transform` på `.todo` og overstyrer transitionen fra
   holdeplass 7. Ikke en bug — det er kaskaden. Enten dropper du den effekten her, eller så flytter
   du scroll-animasjonen til et innerelement.
