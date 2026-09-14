@@ -19,7 +19,10 @@
         <li class="todo" style="view-transition-name: todo-<%= todo.id %>">
             <span class="description"><%= todo.description %></span>
 
-            <!-- Holdeplass 2: skjemaet som toggler completed. -->
+            <form method="POST" action="/todo/<%= todo.id %>/toggle" class="toggle-form">
+                <input name="checked" type="checkbox" <%= todo.completed ? "checked" : "" %> />
+                <button type="submit">Toggle</button>
+            </form>
 
             <!-- Holdeplass 3: Delete-knappen og bekreftelsesdialogen. -->
         </li>
