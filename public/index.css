@@ -63,3 +63,9 @@ button {
 /* ---------------------------------------------------------------
    Herfra og ned er det din tur. Lykke til!
    --------------------------------------------------------------- */
+
+/* Holdeplass 4: gjennomstreking med :has() */
+.todo:has(input[type="checkbox"]:checked) .description {
+  text-decoration: line-through;
+  color: gray;
+}
