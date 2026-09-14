@@ -9,7 +9,10 @@
 <body>
     <h1>🚋 Rutine</h1>
 
-    <!-- Holdeplass 1: skjemaet som oppretter nye todos hører hjemme her. -->
+    <form method="POST" action="/todo" class="new-todo">
+        <input placeholder="Ny todo" name="description" autocomplete="off" required autofocus />
+        <button type="submit">Legg til</button>
+    </form>
 
     <ul aria-label="Todos" class="todos">
     <% todos.forEach(todo => { %>
