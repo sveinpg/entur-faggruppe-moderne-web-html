@@ -148,3 +148,15 @@ dialog::backdrop {
   background: rgb(0 0 0 / 0.4);
   backdrop-filter: blur(2px);
 }
+
+/* Holdeplass 9: popoveren finner selv plassen sin */
+.todo [popover] {
+  position: absolute;
+  position-anchor: var(--anchor);
+  position-area: bottom span-right;
+  margin: 0.5rem 0 0;
+  position-try-fallbacks: flip-block, flip-inline;
+  border: 1px solid lightgray;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+}
