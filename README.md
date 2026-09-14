@@ -46,37 +46,20 @@ restarter når du endrer filer — CSS-endringer trenger bare en refresh.
 
 ---
 
-## 🐛 Tre ting som ser ut som bugs — men ikke er det
-
-**☑️ Checkboxen gjør ingenting alene.**
-Du må trykke «Toggle» for at endringen skal lagres. Checkboxen viser bare tilstanden serveren
-kjenner til. Knappen er prisen for å slippe én linje JavaScript — den diskusjonen tar vi på
-[🏁 Endestasjon](#-endestasjon).
-
-**📂 Bare én todo kan stå åpen om gangen.**
-Alle `<details>` deler `name="example"`, som gjør dem til en eksklusiv accordion. Fjern
-attributtet i `views/index.ejs` hvis det irriterer deg.
-
-**👆 Klikk på checkboxen åpner også todoen.**
-Checkboxen ligger inne i `<summary>`, så klikket treffer begge. Et ekte utslag av at vi presser
-HTML-elementer litt utenfor komfortsonen.
-
----
-
 ## 🛤️ Ruta
 
-| | Holdeplass | Tema | Tid |
-| --- | --- | --- | --- |
-| 1️⃣ | [Gjennomstreking](#1️⃣-gjennomstreking-med-has) | `:has()` | ~15 min |
-| 2️⃣ | [Antall gjenstående](#2️⃣-antall-gjenstående-med-css-counters) | CSS counters | ~20 min |
-| 3️⃣ | [Sideoverganger](#3️⃣-sideoverganger-med-view-transitions) | View Transitions | ~30 min |
-| 4️⃣ | [Nye todos glir inn](#4️⃣-nye-todos-glir-inn-med-starting-style) | `@starting-style` | ~20 min |
-| 5️⃣ | [Slettedialogen](#5️⃣-slettedialogen-med-dialog-og-popover) | `<dialog>` & popover | ~25 min |
-| 6️⃣ | [Tooltip på plass](#6️⃣-tooltip-på-plass-med-anchor-positioning) | Anchor positioning | ~25 min |
-| 7️⃣ | [Filtrering](#7️⃣-filtrering-uten-en-eneste-linje-js) | `:has()` igjen | ~20 min |
-| 8️⃣ | [Scroll-effekter](#8️⃣-scroll-effekter) | Scroll-drevne animasjoner | ~25 min |
+| | Holdeplass | Tema |
+| --- | --- | --- |
+| 1️⃣ | [Gjennomstreking](#1️⃣-gjennomstreking-med-has) | `:has()` |
+| 2️⃣ | [Antall gjenstående](#2️⃣-antall-gjenstående-med-css-counters) | CSS counters |
+| 3️⃣ | [Sideoverganger](#3️⃣-sideoverganger-med-view-transitions) | View Transitions |
+| 4️⃣ | [Nye todos glir inn](#4️⃣-nye-todos-glir-inn-med-starting-style) | `@starting-style` |
+| 5️⃣ | [Slettedialogen](#5️⃣-slettedialogen-med-dialog-og-popover) | `<dialog>` & popover |
+| 6️⃣ | [Tooltip på plass](#6️⃣-tooltip-på-plass-med-anchor-positioning) | Anchor positioning |
+| 7️⃣ | [Filtrering](#7️⃣-filtrering-uten-en-eneste-linje-js) | `:has()` igjen |
+| 8️⃣ | [Scroll-effekter](#8️⃣-scroll-effekter) | Scroll-drevne animasjoner |
 
-**1–5 er hovedruta.** Rekker du bare tre, ta 1, 2 og 3 — de gir mest igjen per minutt.
+**1–5 er hovedruta.** Rekker du bare tre, ta 1, 2 og 3 — de gir mest igjen for innsatsen.
 **6–8 er utflukter** for de som kommer raskt fram.
 
 Hvert steg har 💡 **Hint** og ✅ **Løsningsforslag** i utslåbare blokker. Løsningsforslaget er
@@ -96,6 +79,11 @@ nettleseren vet allerede om checkboxen er huket av.
 
 **🎯 Oppgave:** Stryk over teksten til fullførte todos med CSS alene. Ingen ekstra klasser fra
 serveren.
+
+> ☑️ **Merk at checkboxen ikke gjør noe alene** — du må trykke «Toggle» for at endringen skal
+> lagres. Det er ikke en bug: checkboxen viser bare tilstanden serveren kjenner til, og en
+> checkbox kan ikke sende et skjema av seg selv. Knappen er prisen for å slippe én linje
+> JavaScript, og den diskusjonen tar vi på [🏁 Endestasjon](#-endestasjon).
 
 <details>
 <summary>💡 <b>Hint</b></summary>
@@ -316,6 +304,14 @@ ennå.
 
 **🎯 Oppgave:** Style dialogen, inkludert backdrop og åpne-/lukke-animasjon. Utforsk deretter
 popover som alternativ.
+
+> 📂 **To rariteter du vil møte når du åpner og lukker todos her** — begge med vilje:
+>
+> - **Bare én todo kan stå åpen om gangen.** Alle `<details>` deler `name="example"`, som gjør
+>   dem til en eksklusiv accordion. Fjern attributtet i `views/index.ejs` hvis det er i veien
+>   mens du jobber.
+> - **Klikk på checkboxen åpner også todoen.** Checkboxen ligger inne i `<summary>`, så klikket
+>   treffer begge. Et ekte utslag av at vi presser HTML-elementer litt utenfor komfortsonen.
 
 <details>
 <summary>💡 <b>Hint</b></summary>
