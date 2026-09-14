@@ -1,3 +1,62 @@
+/* ---------------------------------------------------------------
+   Grunnstyling. Nok til at appen er behagelig å se på, og ikke noe
+   mer — all moroa i workshopen skjer under denne kommentaren.
+   Endre gjerne på alt sammen.
+   --------------------------------------------------------------- */
+
 @view-transition {
   navigation: auto;
 }
+
+body {
+  max-width: 40rem;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  font-family: system-ui, sans-serif;
+  line-height: 1.5;
+}
+
+.new-todo {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.new-todo input[type="text"],
+.new-todo input:not([type]) {
+  flex: 1;
+}
+
+input,
+button {
+  font: inherit;
+  padding: 0.4rem 0.7rem;
+}
+
+.todos {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.todo {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid lightgray;
+}
+
+.toggle-form {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dialog-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+/* ---------------------------------------------------------------
+   Herfra og ned er det din tur. Lykke til!
+   --------------------------------------------------------------- */

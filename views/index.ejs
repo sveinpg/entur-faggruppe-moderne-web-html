@@ -9,11 +9,9 @@
 <body>
     <h1>Todornaut</h1>
 
-    <form method="POST" action="/todo">
-        <fieldset role="group">
-            <input placeholder="New todo" name="description" autocomplete="off" required autofocus />
-            <input type="submit" value="Submit" />
-        </fieldset>
+    <form method="POST" action="/todo" class="new-todo">
+        <input placeholder="New todo" name="description" autocomplete="off" required autofocus />
+        <input type="submit" value="Submit" />
     </form>
 
     <ul aria-label="Todos" class="todos">
@@ -33,18 +31,16 @@
                 <button command="show-modal" commandfor="<%= confirmDeleteId %>">Delete</button>
 
                 <dialog id="<%= confirmDeleteId %>">
-                    <article>
-                        <h2>Please confirm</h2>
-                        <form method="POST" action="/todo/<%= todo.id %>/delete">
-                            <p>Are you sure you wish to delete this todo?</p>
-                            <footer>
-                                <fieldset class="grid">
-                                    <button type="button" command="close" commandfor="<%= confirmDeleteId %>">Cancel</button>
-                                    <button type="submit">Delete</button>
-                                </fieldset>
-                            </footer>
-                        </form>
-                    </article>
+                    <h2>Please confirm</h2>
+
+                    <form method="POST" action="/todo/<%= todo.id %>/delete">
+                        <p>Are you sure you wish to delete this todo?</p>
+
+                        <div class="dialog-actions">
+                            <button type="button" command="close" commandfor="<%= confirmDeleteId %>">Cancel</button>
+                            <button type="submit">Delete</button>
+                        </div>
+                    </form>
                 </dialog>
             </details>
         </li>

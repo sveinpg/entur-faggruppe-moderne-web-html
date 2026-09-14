@@ -14,6 +14,10 @@ const readTodos = () => JSON.parse(fs.readFileSync(TODOS_FILE, "utf8"));
 const writeTodos = (todos) =>
   fs.writeFileSync(TODOS_FILE, JSON.stringify(todos, null, 2));
 
+// Monoton teller: id-er gjenbrukes aldri, heller ikke etter sletting.
+// Det er viktig fordi view-transition-name er avledet av id-en.
+let nextId = readTodos().reduce((max, todo) => Math.max(max, todo.id), 0) + 1;
+
 const app = express();
 
 app.set("view engine", "ejs");
@@ -27,10 +31,9 @@ app.get("/", (req, res) => {
 
 app.post("/todo", (req, res) => {
   const todos = readTodos();
-  const nextId = todos.reduce((max, todo) => Math.max(max, todo.id), 0) + 1;
 
   todos.push({
-    id: nextId,
+    id: nextId++,
     description: req.body.description,
     completed: false,
   });

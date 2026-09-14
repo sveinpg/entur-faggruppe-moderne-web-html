@@ -11,7 +11,13 @@ Spørsmålet vi skal svare på: **hvor langt kommer vi med kun HTML og CSS, uten
 linje JavaScript i nettleseren?**
 
 Vi finner det ut ved å bygge videre på en todo-app. Serveren er ferdig og med vilje kjedelig:
-Express, EJS og en JSON-fil. All moroa skjer i `public/index.css`.
+Express, EJS og en JSON-fil. `public/index.css` har litt grunnstyling så appen er til å se på —
+resten er din.
+
+Appen er en gjenskaping av demoen fra Robin Heghans JavaZone-foredrag
+«We're making this harder than it needs to be»
+([kode](https://github.com/robinheghan/javazone2026-demo)), oversatt fra Java/Javalin/JTE til
+Node/Express/EJS og strippet for CSS-rammeverk.
 
 **Én regel:** ingen JavaScript i nettleseren. Ingen htmx, ingen Alpine, ingen inline `onclick`.
 Ingenting.
@@ -28,14 +34,24 @@ npm start
 Appen kjører på <http://localhost:3000>. `npm start` bruker nodemon, så serveren restarter
 automatisk når du endrer filer. Endringer i CSS krever bare en refresh.
 
+### Du trenger en oppdatert nettleser
+
+Workshopen bruker ting som er ferskt i plattformen. Sjekk at du har **Chrome 135+**,
+**Safari 26+** eller **Firefox 140+**.
+
+Særlig `command`/`commandfor` på knapper — som driver slettedialogen helt uten JavaScript — er
+nytt. På en eldre nettleser skjer det rett og slett ingenting når du trykker Delete, og steg 5
+faller sammen. Er du i tvil, kjør Chrome.
+
 ### Prosjektstruktur
 
 ```
 package.json
 server.js         # Express-server, fire ruter, ingenting mer
 views/index.ejs   # Hele HTML-en
-public/index.css  # Her jobber du
+public/index.css  # Litt grunnstyling, og der du jobber
 todos.json        # "Databasen". Slett den for å nullstille.
+CLAUDE.md         # Spilleregler for Claude Code i dette repoet
 ```
 
 Todo-modellen er `{ id, description, completed }`, og rutene er:
@@ -51,12 +67,51 @@ Merk at hver `<li>` allerede har `view-transition-name: todo-<id>`, og at checkb
 todo speiler `completed`-statusen fra serveren. De to detaljene er alt du trenger for å komme
 langt.
 
+### Tre ting som ser ut som bugs, men ikke er det
+
+**Checkboxen gjør ingenting alene.** Du må trykke «Toggle» for at endringen skal lagres.
+Checkboxen viser bare tilstanden serveren kjenner til. Det er ikke en forglemmelse — se
+diskusjonspunktet under.
+
+**Bare én todo kan stå åpen om gangen.** Alle `<details>` deler `name="example"`, som gjør dem
+til en eksklusiv accordion. Fjern attributtet i `views/index.ejs` hvis det irriterer deg mens du
+jobber.
+
+**Klikk på checkboxen åpner også todoen.** Checkboxen ligger inne i `<summary>`, så klikket
+treffer begge. Et ekte utslag av at vi presser HTML-elementer litt utenfor komfortsonen.
+
+### Diskusjonspunkt: hva koster den siste linjen JavaScript?
+
+Originaldemoen løser toggle slik
+([index.jte:33](https://github.com/robinheghan/javazone2026-demo/blob/main/src/main/resources/jte/index.jte#L33)):
+
+```html
+<input name="checked" type="checkbox" checked="${todo.completed()}" onchange="this.form.submit()" />
+```
+
+Én linje JavaScript, og checkboxen oppfører seg nøyaktig som folk forventer: huk av, ferdig.
+Ingen ekstra knapp.
+
+Vi har fjernet den linjen, og prisen er en «Toggle»-knapp ved siden av hver eneste checkbox.
+Funksjonelt likeverdig, merkbart klumpete.
+
+Ikke implementer noe her — bare ta diskusjonen i gruppa underveis:
+
+- Er «null JavaScript» et mål i seg selv, eller et middel?
+- Hvor mye UX er du villig til å ofre for å slippe den linjen?
+- Er en inline `onchange` noe annet enn å dra inn et rammeverk? Hvor går forskjellen?
+- Finnes det en tredje vei som er bedre enn begge?
+
 ---
 
 ## Stegvis guide
 
 Stegene er uavhengige nok til at du kan hoppe over noen, men de bygger fint på hverandre.
 Løsningsforslagene er *et* forslag — ikke fasit.
+
+**Bruker du Claude Code?** Repoet har en `CLAUDE.md` som ber Claude om å diskutere, stille
+spørsmål og finne dokumentasjon — men aldri skrive koden for deg. Det er med vilje: hele poenget
+er at CSS-en skal gjennom fingrene dine.
 
 ### Steg 1: Gjennomstreking med `:has()`
 
@@ -346,23 +401,43 @@ JavaScript-basert posisjonsberegning.
 <details>
 <summary>Løsningsforslag</summary>
 
-```css
-.todo summary {
-  anchor-name: --todo-anchor;
-}
+Ankernavnet må være unikt per todo, så det må skrives ut fra serveren — akkurat som
+`view-transition-name` allerede gjøres. I `views/index.ejs`, inne i `<details>`:
 
+```html
+<button popovertarget="info-<%= todo.id %>">Info</button>
+
+<div id="info-<%= todo.id %>" popover
+     style="--anchor: --todo-<%= todo.id %>">
+    Opprettet som todo nummer <%= todo.id %>.
+</div>
+```
+
+Og sett ankeret på `<li>`-en, som allerede har en id-basert style-attributt:
+
+```html
+<li class="todo" style="view-transition-name: todo-<%= todo.id %>; anchor-name: --todo-<%= todo.id %>">
+```
+
+I CSS:
+
+```css
 .todo [popover] {
   position: absolute;
-  position-anchor: --todo-anchor;
+  position-anchor: var(--anchor);
   position-area: bottom span-right;
   margin: 0.5rem 0 0;
   position-try-fallbacks: flip-block, flip-inline;
+  border: 1px solid lightgray;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
 }
 ```
 
-Fungerer det for én todo, men ikke for alle? Det er hele poenget med at ankernavn må være unike.
-Én løsning er å la serveren skrive ut `anchor-name: --todo-<id>` per element, på samme måte som
-`view-transition-name` allerede gjøres i `views/index.ejs`.
+Trikset er at `position-anchor` leser en custom property, slik at CSS-regelen kan være felles
+mens *verdien* kommer per element. Prøv å scrolle så popoveren ikke får plass under todoen —
+`position-try-fallbacks` snur den over av seg selv. Det er dette man ellers drar inn Floating UI
+for.
 
 </details>
 
@@ -374,10 +449,13 @@ server-runde, ingen JavaScript.
 <details>
 <summary>Hint</summary>
 
-- Tre `<input type="radio" name="filter">` med hver sin `<label for="...">`. Legg dem *utenfor*
-  todo-lista, som søsken til `<ul>`, slik at du kan bruke søskenselektorer.
-- Kombiner `:checked` på radioen med `:has()` på todoen:
-  `#filter-active:checked ~ .todos .todo:has(input:checked) { display: none; }`
+- Tre `<input type="radio" name="filter">` med hver sin `<label for="...">`, plassert over
+  todo-lista.
+- Nøkkelen er å la `:has()` gjøre jobben fra toppen av dokumentet:
+  `body:has(#filter-active:checked) .todo:has(input:checked) { display: none; }`
+- Fristende alternativ: søskenkombinatoren `~`. Den krever at radioknappene og `<ul>` har samme
+  forelder — pakker du radioknappene i en `<fieldset>`, slutter den å virke. `body:has(...)`
+  slipper unna hele problemet.
 - Husk at radioknappene bare er visuell tilstand — ikke send dem til serveren.
 - Ekstra: `:has()` på `<body>` lar deg style hva som helst basert på valgt filter, ikke bare
   lista.
@@ -393,7 +471,7 @@ server-runde, ingen JavaScript.
 I `views/index.ejs`, rett før `<ul class="todos">`:
 
 ```html
-<fieldset class="filters">
+<div class="filters">
     <input type="radio" id="filter-all" name="filter" checked />
     <label for="filter-all">Alle</label>
 
@@ -402,20 +480,34 @@ I `views/index.ejs`, rett før `<ul class="todos">`:
 
     <input type="radio" id="filter-done" name="filter" />
     <label for="filter-done">Fullførte</label>
-</fieldset>
+</div>
 ```
 
 I CSS:
 
 ```css
-#filter-active:checked ~ .todos .todo:has(input[type="checkbox"]:checked) {
+body:has(#filter-active:checked) .todo:has(input[type="checkbox"]:checked) {
   display: none;
 }
 
-#filter-done:checked ~ .todos .todo:not(:has(input[type="checkbox"]:checked)) {
+body:has(#filter-done:checked) .todo:not(:has(input[type="checkbox"]:checked)) {
   display: none;
 }
 ```
+
+Legg merke til at `:has()` her brukes to ganger i samme selektor, på to helt ulike nivåer: én
+gang for å lese filtervalget fra toppen av dokumentet, og én gang for å lese tilstanden til den
+enkelte todoen.
+
+Legg merke til hva som skjer med telleren fra steg 2 når du filtrerer: den følger filteret.
+Skjuler du de aktive todoene, viser den plutselig «0 gjenstår».
+
+Det er ikke en bug. `display: none` fjerner elementet fra box-treet helt, og `counter-increment`
+kjører bare på elementer som faktisk genererer en boks. Filtrering og telling henger altså
+sammen enten du vil eller ikke.
+
+Er det ønsket oppførsel? Diskuter — og hvis svaret er nei: hva kan du bruke i stedet for
+`display: none`?
 
 Legg merke til at telleren fra steg 2 fortsatt oppfører seg riktig — CSS counters teller også
 skjulte elementer. Er det ønsket oppførsel? Diskuter.
@@ -440,6 +532,9 @@ scroller først.
   tidslinjen, ikke av klokka.
 - Pakk gjerne inn i `@supports (animation-timeline: view())` og respekter
   `prefers-reduced-motion`.
+- **Obs:** `animation: ... both` låser `opacity` og `transform` på `.todo` og overstyrer
+  transitionen fra steg 4. Det er ikke en bug — det er kaskaden. Enten dropper du steg 4-effekten
+  her, eller så flytter du scroll-animasjonen til et innerelement.
 - [MDN: CSS scroll-driven animations](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_scroll-driven_animations)
 - [scroll-driven-animations.style](https://scroll-driven-animations.style/) — mange eksempler
 
@@ -498,6 +593,14 @@ Hvor langt kom vi? Gå gjennom i gruppa:
 - Hva føltes naturlig i CSS, og hva føltes som et triks som ikke hører hjemme der?
 - Hvor gikk grensen — hva krevde faktisk JavaScript?
 - Hvilke av disse ville du tatt i bruk i produksjon i morgen?
+
+Ett konkret svar på det midterste spørsmålet: **live oppdatering på tvers av klienter.** Åpne
+appen i to faner og legg til en todo i den ene — den andre vet ingenting før du refresher. Alt
+annet i denne appen klarer seg uten JavaScript; det gjør ikke dette.
+
+Originaldemoen løser det i
+[htmx-grenen](https://github.com/robinheghan/javazone2026-demo/tree/htmx) med server-sent events
+og htmx. Det er tema for neste workshop.
 
 ### Ressurser
 
