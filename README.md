@@ -77,6 +77,17 @@ Workshopen går i to etapper. **Første etappe bygger appen med HTML** — uten 
 Hvert steg har 💡 **Hint** og ✅ **Løsningsforslag** i utslåbare blokker. Løsningsforslaget er
 *et* forslag — ikke fasit.
 
+> 🧭 **Falt du av, eller vil du bare se fasiten kjøre?** Hver holdeplass har sin egen branch med
+> appen ferdig bygget til og med det steget:
+>
+> ```bash
+> git switch losning/holdeplass-03   # appen etter holdeplass 3
+> git switch main                    # tilbake til din egen kode
+> ```
+>
+> `losning/holdeplass-01` til `losning/holdeplass-11`, der den siste er hele appen ferdig. Husk
+> å committe eller stashe ditt eget arbeid før du bytter.
+
 > 🤖 **Bruker du Claude Code?** Repoet har en `CLAUDE.md` som ber Claude om å diskutere, stille
 > spørsmål og finne dokumentasjon — men aldri skrive koden for deg. Det er med vilje: hele
 > poenget er at koden skal gjennom fingrene dine.
