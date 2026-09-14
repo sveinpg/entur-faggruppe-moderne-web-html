@@ -286,8 +286,8 @@ skal et element animere **fra** når det dukker opp for første gang?
 }
 ```
 
-⚠️ Dette og view transitions kan komme i veien for hverandre. Diskuter: når er `@starting-style`
-riktig verktøy, og når er view transitions det?
+⚠️ Dette og view transitions kan komme i veien for hverandre. Verdt å tenke over: når er
+`@starting-style` riktig verktøy, og når er view transitions det?
 
 </details>
 
@@ -514,8 +514,7 @@ Det er ikke en bug. `display: none` fjerner elementet fra box-treet helt, og `co
 kjører bare på elementer som faktisk genererer en boks. Filtrering og telling henger sammen enten
 du vil eller ikke.
 
-Er det ønsket oppførsel? Diskuter — og hvis svaret er nei: hva kan du bruke i stedet for
-`display: none`?
+Er det ønsket oppførsel? Og hvis svaret er nei: hva kan du bruke i stedet for `display: none`?
 
 </details>
 
@@ -601,7 +600,8 @@ body::before {
 
 ## 🏁 Endestasjon
 
-Hvor langt kom vi? Gå gjennom i gruppa:
+Hvor langt kom vi? Tre spørsmål å ta stilling til — alene eller høyt, alt etter hvordan du
+kjører workshopen:
 
 - 🤔 Hva føltes naturlig i CSS, og hva føltes som et triks som ikke hører hjemme der?
 - 🚧 Hvor gikk grensen — hva krevde faktisk JavaScript?
@@ -621,7 +621,7 @@ Da oppfører checkboxen seg nøyaktig som folk forventer: huk av, ferdig. Ingen 
 Vi har valgt den bort, og prisen er en «Toggle»-knapp ved siden av hver eneste checkbox.
 Funksjonelt likeverdig, merkbart klumpete.
 
-> 🗣️ **Ingenting å implementere her** — bare ta diskusjonen:
+> 🗣️ **Ingenting å implementere her** — bare spørsmål verdt å bli litt uenig om:
 >
 > - Er «null JavaScript» et mål i seg selv, eller et middel?
 > - Hvor mye UX er du villig til å ofre for å slippe den linjen?

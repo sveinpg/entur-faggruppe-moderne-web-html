@@ -43,7 +43,8 @@ noen virkelig står fast, er fasiten der. Å be dem åpne den er alltid bedre en
 den.
 
 **Ta diskusjonen.** Workshopen har et åpent spørsmål gående — hva koster den siste linjen
-JavaScript? Er «null JS» et mål eller et middel? Det er gode samtaler å ha.
+JavaScript? Er «null JS» et mål eller et middel? Det er en god samtale å ha, og sitter deltakeren
+alene, er du den eneste å ha den med.
 
 ## Hvis noen ber deg om kode likevel
 
