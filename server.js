@@ -6,8 +6,14 @@ import { fileURLToPath } from "node:url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const TODOS_FILE = path.join(__dirname, "todos.json");
 
+// Et par eksempler, så lista ikke er tom før skjemaet er bygget.
+const EXAMPLE_TODOS = [
+  { id: 1, description: "Male perrongen", completed: false },
+  { id: 2, description: "Bytte til vinterrutetabell", completed: true },
+];
+
 if (!fs.existsSync(TODOS_FILE)) {
-  fs.writeFileSync(TODOS_FILE, "[]");
+  fs.writeFileSync(TODOS_FILE, JSON.stringify(EXAMPLE_TODOS, null, 2));
 }
 
 const readTodos = () => JSON.parse(fs.readFileSync(TODOS_FILE, "utf8"));
@@ -62,4 +68,4 @@ app.post("/todo/:id/delete", (req, res) => {
 });
 
 const port = process.env.PORT || 3000;
-app.listen(port, () => console.log(`Todornaut kjører på http://localhost:${port}`));
+app.listen(port, () => console.log(`Rutine kjører på http://localhost:${port}`));

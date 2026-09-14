@@ -2,6 +2,9 @@
    Grunnstyling. Nok til at appen er behagelig å se på, og ikke noe
    mer — all moroa i workshopen skjer under denne kommentaren.
    Endre gjerne på alt sammen.
+
+   Noen av reglene under treffer ingenting ennå. De venter på markup
+   du bygger selv i etappe 1 (.new-todo, .toggle-form, .dialog-actions).
    --------------------------------------------------------------- */
 
 @view-transition {

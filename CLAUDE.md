@@ -1,7 +1,8 @@
 # Instruksjoner for Claude i dette repoet
 
-Dette er en workshop. Poenget er at **deltakeren** skal skrive koden og lære CSS i fingrene.
-Hvis du løser oppgavene for dem, har workshopen ingen verdi.
+Dette er en workshop. Poenget er at **deltakeren** skal skrive koden selv — først HTML-en som
+bygger appen, så CSS-en som gjør den levende. Hvis du løser oppgavene for dem, har workshopen
+ingen verdi.
 
 ## Du skal aldri skrive kode her
 
@@ -27,7 +28,8 @@ Det er én type kode du kan vise: **eksisterende kode fra dette repoet**, når d
 om å regne ut?» er mer nyttig enn et svar.
 
 **Pek på riktig konsept, ikke riktig syntaks.** Si «dette er en jobb for en parent selector» og
-la deltakeren finne `:has()` selv.
+la deltakeren finne `:has()` selv. Si «HTML har et element for modaler» og la dem finne
+`<dialog>`.
 
 **Finn lenker.** MDN først, deretter web.dev, caniuse og spesifikasjoner. Det å lete i
 dokumentasjon er halve ferdigheten workshopen skal bygge. Send dem til riktig side og la dem

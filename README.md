@@ -13,8 +13,9 @@ og hauger av JavaScript for, er nå innebygd i nettleseren: `:has()`, view trans
 
 **Spørsmålet vi skal svare på:** hvor langt kommer vi med kun HTML og CSS?
 
-Vi finner det ut ved å bygge videre på en todo-app. Serveren er ferdig og med vilje kjedelig:
-Express, EJS og en JSON-fil. Grunnstylingen er på plass. Resten er din.
+Vi finner det ut ved å bygge en todo-app. Serveren er ferdig og med vilje kjedelig: Express, EJS
+og en JSON-fil. Den har fire ruter som venter på deg. **HTML-en og CSS-en bygger du selv** — først
+appen, så alt som gjør den fin.
 
 > 🚫 **Én regel:** ingen JavaScript i nettleseren. Ingen htmx, ingen Alpine, ingen `onclick`.
 > Ingenting.
@@ -27,7 +28,7 @@ Express, EJS og en JSON-fil. Grunnstylingen er på plass. Resten er din.
 > Er du i tvil, kjør Chrome.
 >
 > Særlig `command`/`commandfor` er ferskt. På en eldre nettleser skjer det rett og slett
-> ingenting når du trykker Delete, og holdeplass 5 faller sammen.
+> ingenting når du trykker Delete, og holdeplass 3 faller sammen.
 
 ```bash
 git clone git@github.com:sveinpg/entur-faggruppe-moderne-web-html.git
@@ -38,37 +39,233 @@ npm start
 
 👉 Appen kjører på **<http://localhost:3000>**
 
-CSS-en du skal jobbe i ligger i **`public/index.css`**. `npm start` bruker nodemon, så serveren
-restarter når du endrer filer — CSS-endringer trenger bare en refresh.
+Du kommer til å jobbe i to filer: **`views/index.ejs`** i etappe 1, og **`public/index.css`** i
+etappe 2. `npm start` bruker nodemon, så serveren restarter når du endrer filer — CSS-endringer
+trenger bare en refresh.
 
 ---
 
 ## 🛤️ Ruta
 
+Workshopen går i to etapper. **Første etappe bygger appen med HTML** — uten den har du ingenting
+å style. **Andre etappe gjør den levende med CSS.**
+
+**🧱 Etappe 1 — bygg appen**
+
 | | Holdeplass | Tema |
 | --- | --- | --- |
-| 1️⃣ | [Gjennomstreking](#1️⃣-gjennomstreking-med-has) | `:has()` |
-| 2️⃣ | [Antall gjenstående](#2️⃣-antall-gjenstående-med-css-counters) | CSS counters |
-| 3️⃣ | [Sideoverganger](#3️⃣-sideoverganger-med-view-transitions) | View Transitions |
-| 4️⃣ | [Nye todos glir inn](#4️⃣-nye-todos-glir-inn-med-starting-style) | `@starting-style` |
-| 5️⃣ | [Slettedialogen](#5️⃣-slettedialogen-med-dialog-og-popover) | `<dialog>` & popover |
-| 6️⃣ | [Tooltip på plass](#6️⃣-tooltip-på-plass-med-anchor-positioning) | Anchor positioning |
-| 7️⃣ | [Filtrering](#7️⃣-filtrering-uten-en-eneste-linje-js) | `:has()` igjen |
-| 8️⃣ | [Scroll-effekter](#8️⃣-scroll-effekter) | Scroll-drevne animasjoner |
+| 1 | [Skjemaet som oppretter todos](#holdeplass-1-skjemaet-som-oppretter-todos) | 📝 `<form method="POST">` |
+| 2 | [Huk av en todo](#holdeplass-2-huk-av-en-todo) | ☑️ Boolske attributter |
+| 3 | [Slett med bekreftelse](#holdeplass-3-slett-med-bekreftelse) | 💬 `<dialog>` & invoker commands |
 
-**1–5 er hovedruta.** Rekker du bare tre, ta 1, 2 og 3 — de gir mest igjen for innsatsen.
-**6–8 er utflukter** for de som kommer raskt fram.
+**🎨 Etappe 2 — gjør den levende**
+
+| | Holdeplass | Tema |
+| --- | --- | --- |
+| 4 | [Gjennomstreking](#holdeplass-4-gjennomstreking-med-has) | 🔍 `:has()` |
+| 5 | [Antall gjenstående](#holdeplass-5-antall-gjenstående-med-css-counters) | 🔢 CSS counters |
+| 6 | [Sideoverganger](#holdeplass-6-sideoverganger-med-view-transitions) | 🎞️ View Transitions |
+| 7 | [Nye todos glir inn](#holdeplass-7-nye-todos-glir-inn-med-starting-style) | ✨ `@starting-style` |
+| 8 | [Style dialogen](#holdeplass-8-style-dialogen-du-bygde) | 💅 `::backdrop` & popover |
+| 9 | [Tooltip på plass](#holdeplass-9-tooltip-på-plass-med-anchor-positioning) | 📌 Anchor positioning |
+| 10 | [Filtrering](#holdeplass-10-filtrering-uten-en-eneste-linje-js) | 🔍 `:has()` igjen |
+| 11 | [Scroll-effekter](#holdeplass-11-scroll-effekter) | 📜 Scroll-drevne animasjoner |
+
+**Etappe 1 er obligatorisk** — den tar ikke lang tid, og resten bygger på den. I etappe 2 er
+**4–8 hovedruta**, og **9–11 utflukter** for de som kommer raskt fram.
 
 Hvert steg har 💡 **Hint** og ✅ **Løsningsforslag** i utslåbare blokker. Løsningsforslaget er
 *et* forslag — ikke fasit.
 
 > 🤖 **Bruker du Claude Code?** Repoet har en `CLAUDE.md` som ber Claude om å diskutere, stille
 > spørsmål og finne dokumentasjon — men aldri skrive koden for deg. Det er med vilje: hele
-> poenget er at CSS-en skal gjennom fingrene dine.
+> poenget er at koden skal gjennom fingrene dine.
 
 ---
 
-### 1️⃣ Gjennomstreking med `:has()`
+## 🧱 Etappe 1 — bygg appen
+
+Serveren er ferdig og venter. Den har fire ruter, og alle er allerede koblet opp:
+
+| Rute | Hva den gjør |
+| --- | --- |
+| `GET /` | Rendrer alle todos |
+| `POST /todo` | Oppretter ny todo → redirect `/` |
+| `POST /todo/:id/toggle` | Toggler `completed` → redirect `/` |
+| `POST /todo/:id/delete` | Sletter todo → redirect `/` |
+
+Det som mangler er HTML-en som snakker med dem. I `views/index.ejs` står det tre kommentarer der
+markupen skal inn — én per holdeplass i denne etappen.
+
+> 💡 **EJS på 20 sekunder:** `<%= uttrykk %>` skriver ut en verdi, `<% kode %>` kjører JavaScript
+> **på serveren**. Løkka som rendrer todos er allerede skrevet. Alt annet du legger inn er vanlig
+> HTML.
+
+---
+
+### Holdeplass 1: Skjemaet som oppretter todos
+
+Appen har to eksempel-todos, men ingen måte å lage flere på.
+
+**🎯 Oppgave:** Bygg skjemaet som oppretter en ny todo. Ingen `fetch`, ingen event listeners — et
+skjema som poster.
+
+<details>
+<summary>💡 <b>Hint</b></summary>
+
+<br>
+
+- `<form method="POST" action="/todo">` sender skjemaet dit serveren lytter.
+- Serveren leser feltet som `req.body.description` — se `server.js`. Da må `name`-attributtet på
+  input-en hete nøyaktig det samme. Dette er hele kontrakten mellom HTML og server.
+- Gi `class="new-todo"` på skjemaet, så treffer grunnstylingen som allerede ligger i CSS-en.
+- `required` gir deg validering uten en eneste linje kode. `autofocus` setter markøren i feltet
+  ved lasting, og `autocomplete="off"` holder nettleserens forslag unna.
+- Serveren svarer med en redirect tilbake til `/`. Mønsteret heter **POST/Redirect/GET**, og det
+  er grunnen til at du kan refreshe etterpå uten å få «vil du sende inn på nytt?».
+
+📖 [MDN: `<form>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form) ·
+[MDN: Client-side form validation](https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation) ·
+[MDN: POST/Redirect/GET](https://developer.mozilla.org/en-US/docs/Web/HTTP/Redirections)
+
+</details>
+
+<details>
+<summary>✅ <b>Løsningsforslag</b></summary>
+
+<br>
+
+I `views/index.ejs`, der den første kommentaren står:
+
+```html
+<form method="POST" action="/todo" class="new-todo">
+    <input placeholder="Ny todo" name="description" autocomplete="off" required autofocus />
+    <button type="submit">Legg til</button>
+</form>
+```
+
+🔑 **Poenget:** hele dataflyten — tekst inn, lagret på server, ny side rendret — uten at du har
+skrevet JavaScript. Dette er hvordan web fungerte lenge før `fetch`, og det virker fortsatt.
+
+</details>
+
+---
+
+### Holdeplass 2: Huk av en todo
+
+Todoene vises, men du kan ikke krysse dem av.
+
+**🎯 Oppgave:** Gi hver todo et skjema som poster til `/todo/<id>/toggle`, med en checkbox som
+viser om den er fullført.
+
+<details>
+<summary>💡 <b>Hint</b></summary>
+
+<br>
+
+- Hver todo trenger sitt **eget** skjema — du kan ikke ha ett skjema rundt hele lista, for da
+  vet ikke serveren hvilken todo du mener. Skjemaer kan heller ikke ligge inni hverandre.
+- Id-en må inn i `action`. Løkka gir deg `todo.id`, som du skriver ut med `<%= todo.id %>`.
+- `checked` er en **boolsk attributt**: den er enten til stede eller ikke. `checked="false"`
+  slår den *på*. Så du må skrive den ut betinget.
+- Gi `class="toggle-form"`, så treffer grunnstylingen.
+- ⚠️ En checkbox kan ikke sende et skjema av seg selv. Du trenger en knapp i tillegg.
+
+📖 [MDN: `<input type="checkbox">`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox) ·
+[MDN: Boolean attributes](https://developer.mozilla.org/en-US/docs/Glossary/Boolean/HTML)
+
+</details>
+
+<details>
+<summary>✅ <b>Løsningsforslag</b></summary>
+
+<br>
+
+```html
+<form method="POST" action="/todo/<%= todo.id %>/toggle" class="toggle-form">
+    <input name="checked" type="checkbox" <%= todo.completed ? "checked" : "" %> />
+    <button type="submit">Toggle</button>
+</form>
+```
+
+Ternaryen er ikke elegant, men det finnes ikke noe alternativ: en boolsk attributt må enten
+skrives ut eller utelates helt.
+
+> 🗣️ **Toggle-knappen kommer til å irritere deg.** Du huker av, og ingenting skjer før du trykker
+> knappen. Det er ikke en bug — det er prisen for regelen om null JavaScript. Én linje
+> `onchange="this.form.submit()"` ville fjernet knappen. Den diskusjonen tar vi på
+> [🏁 Endestasjon](#-endestasjon).
+
+</details>
+
+---
+
+### Holdeplass 3: Slett med bekreftelse
+
+Nå mangler bare sletting — og en «er du sikker?» før den går.
+
+**🎯 Oppgave:** Bygg en Delete-knapp som åpner en modal, og la modalen inneholde skjemaet som
+faktisk sletter. Fortsatt null JavaScript.
+
+<details>
+<summary>💡 <b>Hint</b></summary>
+
+<br>
+
+- `<dialog>` er et ekte modal-element i HTML. Det håndterer backdrop, fokusfelle og Escape helt
+  på egen hånd.
+- Du åpner og lukker den med **invoker commands**: en knapp med `command="show-modal"` og
+  `commandfor="<id-en til dialogen>"`. For å lukke: `command="close"`.
+- ⚠️ Hver todo får sin egen dialog, så id-ene må være unike. Bak dem med `todo.id`.
+- Knappen som avbryter må ha `type="button"` — ellers sender den skjemaet, som er det motsatte
+  av å avbryte.
+- Skjemaet som sletter kan ligge **inne i** dialogen. Gi knapperaden `class="dialog-actions"`.
+
+📖 [MDN: `<dialog>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dialog) ·
+[MDN: `command`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#command) ·
+[MDN: `commandfor`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#commandfor)
+
+</details>
+
+<details>
+<summary>✅ <b>Løsningsforslag</b></summary>
+
+<br>
+
+```html
+<button command="show-modal" commandfor="confirm-delete-<%= todo.id %>">Slett</button>
+
+<dialog id="confirm-delete-<%= todo.id %>">
+    <h2>Er du sikker?</h2>
+
+    <form method="POST" action="/todo/<%= todo.id %>/delete">
+        <p>Denne todoen blir borte for godt.</p>
+
+        <div class="dialog-actions">
+            <button type="button" command="close" commandfor="confirm-delete-<%= todo.id %>">Avbryt</button>
+            <button type="submit">Slett</button>
+        </div>
+    </form>
+</dialog>
+```
+
+🔑 **Poenget:** en modal med backdrop, fokushåndtering, Escape-lukking og en destruktiv handling
+bak bekreftelse — null JavaScript. For få år siden var dette et bibliotek.
+
+🎁 **Bonus:** vil du gjemme Delete-knappen til man ber om den, pakk den i en `<details>` med en
+`<summary>`. Enda et HTML-element som gjør en JS-jobb.
+
+</details>
+
+---
+
+## 🎨 Etappe 2 — gjør den levende
+
+Appen virker. Nå skal den bli fin — og alt som følger skjer i `public/index.css`.
+
+---
+
+### Holdeplass 4: Gjennomstreking med `:has()`
 
 Den enkle måten er å la serveren sende med en `completed`-klasse, eller en inline
 `text-decoration: line-through`, på hver fullførte todo. Men det er unødvendig arbeid:
@@ -77,11 +274,6 @@ nettleseren vet allerede om checkboxen er huket av.
 **🎯 Oppgave:** Stryk over teksten til fullførte todos med CSS alene. Ingen ekstra klasser fra
 serveren.
 
-> ☑️ **Merk at checkboxen ikke gjør noe alene** — du må trykke «Toggle» for at endringen skal
-> lagres. Det er ikke en bug: checkboxen viser bare tilstanden serveren kjenner til, og en
-> checkbox kan ikke sende et skjema av seg selv. Knappen er prisen for å slippe én linje
-> JavaScript, og den diskusjonen tar vi på [🏁 Endestasjon](#-endestasjon).
-
 <details>
 <summary>💡 <b>Hint</b></summary>
 
@@ -89,7 +281,9 @@ serveren.
 
 - `:has()` er en **parent selector**: `.todo:has(input:checked)` matcher en todo som *inneholder*
   en avhuket checkbox.
-- Du kan også bruke søskenselektor: `input:checked ~ .description`.
+- ⚠️ Fristende alternativ: `input:checked ~ .description`. Men `~` treffer bare **søsken**, og
+  checkboxen ligger inne i toggle-skjemaet mens teksten ligger utenfor. `:has()` bryr seg ikke
+  om det.
 - Prøv å style hele raden, ikke bare teksten — dempet farge, redusert opacity.
 
 📖 [MDN: `:has()`](https://developer.mozilla.org/en-US/docs/Web/CSS/:has) ·
@@ -107,11 +301,6 @@ serveren.
   text-decoration: line-through;
   color: gray;
 }
-
-/* Eller uten :has(), med søskenselektor: */
-input[type="checkbox"]:checked ~ .description {
-  text-decoration: line-through;
-}
 ```
 
 🔑 **Poenget:** tilstanden bor i DOM-en, ikke i en klasse serveren måtte regne ut.
@@ -120,7 +309,7 @@ input[type="checkbox"]:checked ~ .description {
 
 ---
 
-### 2️⃣ Antall gjenstående med CSS counters
+### Holdeplass 5: Antall gjenstående med CSS counters
 
 **🎯 Oppgave:** Vis antall gjenstående (ikke-fullførte) todos — uten JavaScript, og uten at
 serveren teller for deg.
@@ -173,7 +362,7 @@ serveren teller for deg.
 
 ---
 
-### 3️⃣ Sideoverganger med View Transitions
+### Holdeplass 6: Sideoverganger med View Transitions
 
 `public/index.css` inneholder allerede:
 
@@ -242,7 +431,7 @@ Prøv også `view-transition-class` hvis du vil gruppere flere navn under én re
 
 ---
 
-### 4️⃣ Nye todos glir inn med `@starting-style`
+### Holdeplass 7: Nye todos glir inn med `@starting-style`
 
 View transitions dekker navigasjoner. `@starting-style` dekker det mer generelle tilfellet: hva
 skal et element animere **fra** når det dukker opp for første gang?
@@ -293,22 +482,14 @@ skal et element animere **fra** når det dukker opp for første gang?
 
 ---
 
-### 5️⃣ Slettedialogen med `<dialog>` og popover
+### Holdeplass 8: Style dialogen du bygde
 
-Slettebekreftelsen bruker allerede `<dialog>` og **invoker commands**
-(`command="show-modal" commandfor="…"`) — helt uten JavaScript. Den ser bare ikke spesielt bra ut
-ennå.
+Dialogen du bygde i [holdeplass 3](#holdeplass-3-slett-med-bekreftelse) virker, men ser ut som
+en dialog fra 2011. Nettleseren gir deg backdrop, fokushåndtering og Escape gratis — resten er
+din.
 
 **🎯 Oppgave:** Style dialogen, inkludert backdrop og åpne-/lukke-animasjon. Utforsk deretter
 popover som alternativ.
-
-> 📂 **To rariteter du vil møte når du åpner og lukker todos her** — begge med vilje:
->
-> - **Bare én todo kan stå åpen om gangen.** Alle `<details>` deler `name="example"`, som gjør
->   dem til en eksklusiv accordion. Fjern attributtet i `views/index.ejs` hvis det er i veien
->   mens du jobber.
-> - **Klikk på checkboxen åpner også todoen.** Checkboxen ligger inne i `<summary>`, så klikket
->   treffer begge. Et ekte utslag av at vi presser HTML-elementer litt utenfor komfortsonen.
 
 <details>
 <summary>💡 <b>Hint</b></summary>
@@ -376,7 +557,7 @@ Popover-varianten i HTML, hvis du vil prøve:
 
 ---
 
-### 6️⃣ Tooltip på plass med anchor positioning
+### Holdeplass 9: Tooltip på plass med anchor positioning
 
 **🎯 Oppgave:** Posisjoner en tooltip eller popover relativt til en bestemt todo — uten
 JavaScript-basert posisjonsberegning.
@@ -449,7 +630,7 @@ av seg selv.
 
 ---
 
-### 7️⃣ Filtrering uten en eneste linje JS
+### Holdeplass 10: Filtrering uten en eneste linje JS
 
 **🎯 Oppgave:** Legg til filtrering — alle / aktive / fullførte — med radioknapper. Ingen
 server-runde, ingen JavaScript.
@@ -507,7 +688,7 @@ body:has(#filter-done:checked) .todo:not(:has(input[type="checkbox"]:checked)) {
 🔑 `:has()` brukes to ganger i samme selektor, på to helt ulike nivåer: én gang for å lese
 filtervalget fra toppen av dokumentet, én gang for å lese tilstanden til den enkelte todoen.
 
-🤔 **Legg merke til telleren fra holdeplass 2 når du filtrerer** — den følger filteret. Skjuler du
+🤔 **Legg merke til telleren fra holdeplass 5 når du filtrerer** — den følger filteret. Skjuler du
 de aktive todoene, viser den plutselig «0 gjenstår».
 
 Det er ikke en bug. `display: none` fjerner elementet fra box-treet helt, og `counter-increment`
@@ -520,7 +701,7 @@ Er det ønsket oppførsel? Og hvis svaret er nei: hva kan du bruke i stedet for 
 
 ---
 
-### 8️⃣ Scroll-effekter
+### Holdeplass 11: Scroll-effekter
 
 **🎯 Oppgave:** Animer elementer basert på scroll-posisjon. Legg inn nok todos til at siden
 faktisk scroller først.
@@ -540,7 +721,7 @@ faktisk scroller først.
   tidslinjen, ikke av klokka.
 - ♿ Pakk inn i `@supports (animation-timeline: view())` og respekter `prefers-reduced-motion`.
 - ⚠️ `animation: … both` låser `opacity` og `transform` på `.todo` og overstyrer transitionen fra
-  holdeplass 4. Ikke en bug — det er kaskaden. Enten dropper du den effekten her, eller så flytter
+  holdeplass 7. Ikke en bug — det er kaskaden. Enten dropper du den effekten her, eller så flytter
   du scroll-animasjonen til et innerelement.
 
 📖 [MDN: Scroll-driven animations](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_scroll-driven_animations) ·
@@ -609,8 +790,8 @@ kjører workshopen:
 
 ### 💬 Hva koster den siste linjen JavaScript?
 
-Husker du Toggle-knappen som irriterte deg helt i starten? Den finnes fordi en checkbox ikke kan
-sende et skjema av seg selv. Den åpenbare løsningen er én linje JavaScript:
+Husker du Toggle-knappen du bygde i holdeplass 2? Den finnes fordi en checkbox ikke kan sende et
+skjema av seg selv. Den åpenbare løsningen er én linje JavaScript:
 
 ```html
 <input type="checkbox" onchange="this.form.submit()" />
@@ -651,17 +832,12 @@ todos.json        💾 "Databasen". Slett den for å nullstille.
 CLAUDE.md         🤖 Spilleregler for Claude Code i dette repoet
 ```
 
-Todo-modellen er `{ id, description, completed }`:
+Todo-modellen er `{ id, description, completed }`, og de fire rutene står listet i
+[🧱 Etappe 1](#-etappe-1--bygg-appen).
 
-| Rute | Hva den gjør |
-| --- | --- |
-| `GET /` | Rendrer alle todos |
-| `POST /todo` | Oppretter ny todo → redirect `/` |
-| `POST /todo/:id/toggle` | Toggler `completed` → redirect `/` |
-| `POST /todo/:id/delete` | Sletter todo → redirect `/` |
-
-> 💡 **To detaljer er alt du trenger for å komme langt:** hver `<li>` har
-> `view-transition-name: todo-<id>`, og checkboxen speiler `completed` fra serveren.
+> 💡 **En detalj som er gjort for deg:** hver `<li>` har `view-transition-name: todo-<id>`.
+> Navnet må være unikt per element, og det er nettopp derfor id-en er med — noe du får bruk for
+> i holdeplass 6 og 9.
 
 ---
 
