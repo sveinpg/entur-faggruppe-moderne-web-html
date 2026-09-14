@@ -2,7 +2,7 @@
   "name": "entur-faggruppe-moderne-web-html",
   "version": "1.0.0",
   "private": true,
-  "description": "Todo-app workshop: hvor langt kommer vi med kun HTML og CSS?",
+  "description": "Rutine — workshop om hvor langt man kommer med kun HTML og CSS",
   "type": "module",
   "scripts": {
     "start": "nodemon server.js",
