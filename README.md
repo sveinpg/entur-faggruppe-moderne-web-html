@@ -91,6 +91,10 @@ Hvert steg har 💡 **Hint** og ✅ **Løsningsforslag** i utslåbare blokker. L
 >
 > `losning/holdeplass-01` til `losning/holdeplass-11`, der den siste er hele appen ferdig. Husk
 > å committe eller stashe ditt eget arbeid før du bytter.
+>
+> Branchene inneholder **bare koden** — denne guiden ligger på `main`. Trenger du den mens du
+> står på en løsningsbranch, les den [på GitHub](https://github.com/sveinpg/entur-faggruppe-moderne-web-html#readme)
+> eller kjør `git show main:README.md`.
 
 > 🤖 **Bruker du Claude Code?** Repoet har en `CLAUDE.md` som ber Claude om å diskutere, stille
 > spørsmål og finne dokumentasjon — men aldri skrive koden for deg. Det er med vilje: hele
