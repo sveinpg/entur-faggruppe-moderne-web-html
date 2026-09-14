@@ -24,7 +24,20 @@
                 <button type="submit">Toggle</button>
             </form>
 
-            <!-- Holdeplass 3: Delete-knappen og bekreftelsesdialogen. -->
+            <button command="show-modal" commandfor="confirm-delete-<%= todo.id %>">Slett</button>
+
+            <dialog id="confirm-delete-<%= todo.id %>">
+                <h2>Er du sikker?</h2>
+
+                <form method="POST" action="/todo/<%= todo.id %>/delete">
+                    <p>Denne todoen blir borte for godt.</p>
+
+                    <div class="dialog-actions">
+                        <button type="button" command="close" commandfor="confirm-delete-<%= todo.id %>">Avbryt</button>
+                        <button type="submit">Slett</button>
+                    </div>
+                </form>
+            </dialog>
         </li>
     <% }); %>
     </ul>
