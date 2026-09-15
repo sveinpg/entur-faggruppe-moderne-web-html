@@ -194,13 +194,16 @@ dialog::backdrop {
   backdrop-filter: blur(2px);
 }
 
-/* Holdeplass 9: popoveren finner selv plassen sin */
+/* Holdeplass 9: popoveren finner selv plassen sin.
+   Knappen som åpnet popoveren er dens implisitte anker — popovertarget
+   knytter de to sammen, og den koblingen er også ankerreferansen.
+   Derfor trengs verken anchor-name eller position-anchor.
+   En popover er allerede position: fixed med margin: auto, så margin-en
+   må overstyres for at ankringen skal treffe. */
 .todo [popover] {
-  position: absolute;
-  position-anchor: var(--anchor);
   position-area: bottom span-right;
-  margin: 0.5rem 0 0;
   position-try-fallbacks: flip-block, flip-inline;
+  margin: 0.4rem;
   border: 1px solid lightgray;
   border-radius: 0.5rem;
   padding: 0.5rem 0.75rem;

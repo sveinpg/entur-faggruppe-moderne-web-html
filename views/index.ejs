@@ -27,7 +27,7 @@
 
     <ul aria-label="Todos" class="todos">
     <% todos.forEach(todo => { %>
-        <li class="todo" style="view-transition-name: todo-<%= todo.id %>; anchor-name: --todo-<%= todo.id %>">
+        <li class="todo" style="view-transition-name: todo-<%= todo.id %>">
             <span class="description"><%= todo.description %></span>
 
             <form method="POST" action="/todo/<%= todo.id %>/toggle" class="toggle-form">
@@ -52,7 +52,7 @@
 
             <button popovertarget="info-<%= todo.id %>">Info</button>
 
-            <div id="info-<%= todo.id %>" popover style="--anchor: --todo-<%= todo.id %>">
+            <div id="info-<%= todo.id %>" popover>
                 Opprettet <%= created(todo) %>.
             </div>
         </li>
