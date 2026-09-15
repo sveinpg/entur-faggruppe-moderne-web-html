@@ -78,6 +78,9 @@ Workshopen går i to etapper. **Første etappe bygger appen med HTML** — uten 
 **Etappe 1 er obligatorisk** — den tar ikke lang tid, og resten bygger på den. I etappe 2 er
 **4–8 hovedruta**, og **9–11 utflukter** for de som kommer raskt fram.
 
+Utenom ruta ligger [🛤️ Sidespor](#-sidespor): frivillige omveier for deg som blir tidlig ferdig
+eller vil grave dypere i noe du nettopp bygget.
+
 Hvert steg har 💡 **Hint** og ✅ **Løsningsforslag** i utslåbare blokker. Løsningsforslaget er
 *et* forslag — ikke fasit.
 
@@ -389,7 +392,8 @@ serveren teller for deg.
 }
 ```
 
-🎁 **Bonus:** nummerer todos med en egen teller, og bruk en andre teller for «X av Y fullført».
+🎁 **Bonus:** to tellere samtidig gir deg «3 av 7 fullført» — se
+[🛤️ Sidespor](#-sidespor).
 
 </details>
 
@@ -459,7 +463,8 @@ ulik overgang.
 kommer til eller forsvinner. Todos som finnes i begge tilstander får den innebygde
 morph-animasjonen, som er akkurat det vi vil ha når en todo bare flytter på seg.
 
-Prøv også `view-transition-class` hvis du vil gruppere flere navn under én regel.
+Vil du gruppere flere navn under én regel, ligger `view-transition-class` på
+[🛤️ Sidespor](#-sidespor).
 
 </details>
 
@@ -580,7 +585,7 @@ dialog::backdrop {
 }
 ```
 
-Popover-varianten i HTML, hvis du vil prøve:
+Popover-varianten i HTML — den bruker du igjen på holdeplass 9:
 
 ```html
 <button popovertarget="info-1">Info</button>
@@ -601,15 +606,13 @@ JavaScript-basert posisjonsberegning.
 
 <br>
 
-- Ankeret får `anchor-name: --et-navn`, elementet som skal posisjoneres får
-  `position-anchor: --et-navn` og `position: absolute`.
+- 🎁 Du får ankeret gratis: en popover som åpnes med `popovertarget` har allerede knappen som
+  åpnet den som **implisitt anker**. Ingen `anchor-name`, ingen `position-anchor`.
 - `position-area: bottom center` er en enkel snarvei for de vanlige plasseringene.
 - 🪄 `position-try-fallbacks: flip-block, flip-inline` gjør at tooltipen snur når den ikke får
   plass — det er akkurat dette man ellers drar inn Floating UI for.
-- Et popover-element ligger i top layer, og anchor positioning er laget for nettopp den
-  kombinasjonen.
-- ⚠️ Ankernavn må være unike per element, så du trenger ett per todo. Hvordan får du en
-  CSS-regel til å bruke **ulik** verdi per element?
+- ⚠️ En popover er allerede `position: fixed` med `margin: auto` fra nettleseren. Den margin-en
+  må du nulle ut, ellers dytter den seg selv bort fra ankeret.
 
 📖 [MDN: CSS anchor positioning](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_anchor_positioning) ·
 [MDN: `position-area`](https://developer.mozilla.org/en-US/docs/Web/CSS/position-area)
@@ -621,14 +624,12 @@ JavaScript-basert posisjonsberegning.
 
 <br>
 
-Ankernavnet må være unikt per todo, så det må skrives ut fra serveren — akkurat som
-`view-transition-name` allerede gjøres. I `views/index.ejs`, inne i `<li class="todo">`:
+Markupen er den samme som på holdeplass 8 — ingenting nytt trengs:
 
 ```html
 <button popovertarget="info-<%= todo.id %>">Info</button>
 
-<div id="info-<%= todo.id %>" popover
-     style="--anchor: --todo-<%= todo.id %>">
+<div id="info-<%= todo.id %>" popover>
     Opprettet <%= created(todo) %>.
 </div>
 ```
@@ -636,32 +637,29 @@ Ankernavnet må være unikt per todo, så det må skrives ut fra serveren — ak
 `created` er en liten hjelper serveren sender med til malen — den formaterer `todo.createdAt`
 til lesbar norsk dato. Se `server.js`.
 
-Og sett ankeret på `<li>`-en, som allerede har en id-basert style-attributt:
-
-```html
-<li class="todo" style="view-transition-name: todo-<%= todo.id %>; anchor-name: --todo-<%= todo.id %>">
-```
-
-I CSS:
+Hele jobben gjøres i CSS:
 
 ```css
 .todo [popover] {
-  position: absolute;
-  position-anchor: var(--anchor);
   position-area: bottom span-right;
-  margin: 0.5rem 0 0;
   position-try-fallbacks: flip-block, flip-inline;
+  margin: 0.4rem;
   border: 1px solid lightgray;
   border-radius: 0.5rem;
   padding: 0.5rem 0.75rem;
 }
 ```
 
-🔑 Trikset er at `position-anchor` leser en custom property, slik at CSS-regelen kan være felles
-mens **verdien** kommer per element.
+🔑 **Poenget:** ingen koordinater, ingen `anchor-name`, ingen JavaScript. `popovertarget` knytter
+knappen og popoveren sammen, og den koblingen er *også* ankerreferansen. Én regel dekker alle
+todos, fordi hver popover peker på sin egen knapp helt av seg selv.
 
-Prøv å scrolle så popoveren ikke får plass under todoen — `position-try-fallbacks` snur den over
-av seg selv.
+Prøv å scrolle så popoveren ikke får plass under knappen — `position-try-fallbacks` snur den over
+av seg selv. Det er den funksjonen folk ellers installerer et bibliotek for.
+
+> 🛤️ **Vil du ankre til noe annet enn knappen** — hele raden, for eksempel — må du navngi ankeret
+> selv, og da støter du på at navn må være unike per todo. Den varianten ligger på
+> [🛤️ Sidespor](#-sidespor).
 
 </details>
 
@@ -733,6 +731,7 @@ kjører bare på elementer som faktisk genererer en boks. Filtrering og telling 
 du vil eller ikke.
 
 Er det ønsket oppførsel? Og hvis svaret er nei: hva kan du bruke i stedet for `display: none`?
+Det spørsmålet har fått sitt eget [🛤️ Sidespor](#-sidespor).
 
 </details>
 
@@ -818,6 +817,140 @@ body::before {
 
 ---
 
+## 🛤️ Sidespor
+
+Omveier som ikke ligger på ruta. De er her for deg som blir tidlig ferdig, eller som vil grave i
+noe spesielt — ta dem i hvilken rekkefølge du vil, og hopp over resten uten dårlig samvittighet.
+
+Hvert sidespor sier hva det bygger på, hva det lærer bort, og omtrent hvor lenge det tar.
+
+---
+
+### 🧭 Ulikt anker per element
+
+> **Bygger på:** holdeplass 9 · **Lærer bort:** hvordan én CSS-regel får ulik verdi per element ·
+> **Tid:** ~20 min
+
+På holdeplass 9 slapp du unna med det implisitte ankeret: popoveren peker på knappen som åpnet
+den, helt gratis. Men hva om du vil ankre til noe annet — hele raden, for eksempel, så tooltipen
+legger seg under todoen i stedet for under knappen?
+
+Da må du navngi ankeret selv med `anchor-name`, og der møter du veggen: **ankernavn må være
+unike per element.** Du har én CSS-regel og mange todos. Hvordan får du regelen til å bruke en
+ulik verdi for hver?
+
+<details>
+<summary>💡 <b>Hint</b></summary>
+
+<br>
+
+- Serveren kan skrive ut hva som helst per element — den gjør det allerede med
+  `view-transition-name` på `<li>`-en.
+- CSS-regelen må være felles, men **verdien** kan komme utenfra. Hva i CSS er laget for nettopp
+  det å bære en verdi som settes et annet sted?
+- `position-anchor` tar en verdi. Den verdien trenger ikke stå skrevet i regelen.
+
+📖 [MDN: `anchor-name`](https://developer.mozilla.org/en-US/docs/Web/CSS/anchor-name) ·
+[MDN: Custom properties](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_cascading_variables/Using_CSS_custom_properties)
+
+</details>
+
+<details>
+<summary>✅ <b>Løsningsforslag</b></summary>
+
+<br>
+
+Sett ankernavnet på `<li>`-en, som allerede har en id-basert style-attributt:
+
+```html
+<li class="todo" style="view-transition-name: todo-<%= todo.id %>; anchor-name: --todo-<%= todo.id %>">
+```
+
+Og la popoveren bære sitt eget ankernavn som en custom property:
+
+```html
+<div id="info-<%= todo.id %>" popover style="--anchor: --todo-<%= todo.id %>">
+    Opprettet <%= created(todo) %>.
+</div>
+```
+
+```css
+.todo [popover] {
+  position: absolute;
+  position-anchor: var(--anchor);
+  position-area: bottom span-right;
+}
+```
+
+🔑 Trikset er at `position-anchor` leser en custom property, slik at regelen kan være felles mens
+verdien kommer per element. Samme mønster løser alt som må være unikt per element i CSS.
+
+</details>
+
+---
+
+### 🔢 «X av Y fullført»
+
+> **Bygger på:** holdeplass 5 · **Lærer bort:** flere tellere samtidig · **Tid:** ~10 min
+
+Telleren din viser hvor mange som gjenstår. Utvid til «3 av 7 fullført» — det krever to tellere
+som teller ulike ting i samme liste. Nummerer gjerne todoene med en tredje mens du er i gang.
+
+📖 [MDN: Using CSS counters](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_counter_styles/Using_CSS_counters)
+
+---
+
+### 🎞️ Grupper overganger med `view-transition-class`
+
+> **Bygger på:** holdeplass 6 · **Lærer bort:** å style mange transition-navn under én regel ·
+> **Tid:** ~10 min
+
+På holdeplass 6 traff du alle overgangene med `*`, eller én bestemt med navnet sitt. Midt imellom
+ligger `view-transition-class`: gi flere elementer samme klasse, og style dem som gruppe. Prøv å
+gi fullførte og aktive todos hver sin overgang.
+
+📖 [MDN: `view-transition-class`](https://developer.mozilla.org/en-US/docs/Web/CSS/view-transition-class)
+
+---
+
+### 💬 Popover eller dialog?
+
+> **Bygger på:** holdeplass 3 og 8 · **Lærer bort:** når modal er riktig, og når det er i veien ·
+> **Tid:** ~15 min
+
+Du har begge i appen nå: en `<dialog>` for sletting og en popover for info. De ser like ut, men
+oppfører seg helt ulikt. Undersøk forskjellen med tastaturet — tab deg rundt mens hver av dem er
+åpen, og trykk Escape.
+
+Spørsmål å ta med videre: hvorfor fanger dialogen fokus, mens popoveren ikke gjør det? Hvilken av
+dem er riktig for en bekreftelse du *må* svare på? Og hva skjer med resten av siden når et element
+løftes til top layer?
+
+📖 [MDN: `<dialog>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dialog) ·
+[MDN: Popover API](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API) ·
+[MDN: Top layer](https://developer.mozilla.org/en-US/docs/Glossary/Top_layer)
+
+---
+
+### 🔍 Telleren som forsvinner
+
+> **Bygger på:** holdeplass 5 og 10 · **Lærer bort:** hva `display: none` egentlig gjør ·
+> **Tid:** ~15 min, mest diskusjon
+
+Filtrerer du bort de aktive todoene, sier telleren plutselig «0 gjenstår». Det er ikke en bug:
+`display: none` fjerner elementet fra box-treet, og `counter-increment` kjører bare på elementer
+som faktisk genererer en boks.
+
+Finn ut hva som skjer hvis du skjuler radene på andre måter i stedet. Teller de fortsatt? Tar de
+fortsatt plass? Det finnes ikke ett riktig svar her — poenget er at «skjult» betyr flere
+forskjellige ting i CSS, og at du må velge hvilken du mener.
+
+📖 [MDN: `display`](https://developer.mozilla.org/en-US/docs/Web/CSS/display) ·
+[MDN: `visibility`](https://developer.mozilla.org/en-US/docs/Web/CSS/visibility) ·
+[MDN: `content-visibility`](https://developer.mozilla.org/en-US/docs/Web/CSS/content-visibility)
+
+---
+
 ## 🏁 Endestasjon
 
 Hvor langt kom vi? Tre spørsmål å ta stilling til — alene eller høyt, alt etter hvordan du
@@ -894,7 +1027,7 @@ formaterer `createdAt` til lesbar dato — den brukes av popoveren på holdeplas
 
 > 💡 **En detalj som er gjort for deg:** hver `<li>` har `view-transition-name: todo-<id>`.
 > Navnet må være unikt per element, og det er nettopp derfor id-en er med — noe du får bruk for
-> i holdeplass 6 og 9.
+> i holdeplass 6, og igjen hvis du tar sidesporet om ankernavn.
 
 ---
 
