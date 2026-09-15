@@ -4,7 +4,7 @@
    Endre gjerne på alt sammen.
 
    Noen av reglene under treffer ingenting ennå. De venter på markup
-   du bygger selv i etappe 1 (.new-todo, .toggle-form, .dialog-actions).
+   du bygger selv (.new-todo, .toggle-form, .dialog-actions, .filters).
    --------------------------------------------------------------- */
 
 @view-transition {
@@ -19,6 +19,36 @@ body {
   line-height: 1.5;
 }
 
+h1 {
+  margin-block: 0 1.5rem;
+}
+
+input,
+button {
+  font: inherit;
+}
+
+input:not([type="checkbox"], [type="radio"]),
+button {
+  padding: 0.4rem 0.7rem;
+  border: 1px solid lightgray;
+  border-radius: 0.4rem;
+  background: white;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:hover {
+  border-color: gray;
+}
+
+input[type="checkbox"] {
+  inline-size: 1.1rem;
+  block-size: 1.1rem;
+}
+
 .new-todo {
   display: flex;
   gap: 0.5rem;
@@ -30,10 +60,15 @@ body {
   flex: 1;
 }
 
-input,
-button {
-  font: inherit;
-  padding: 0.4rem 0.7rem;
+.filters {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 1rem;
+}
+
+.filters label {
+  margin-inline-end: 0.75rem;
 }
 
 .todos {
@@ -42,9 +77,19 @@ button {
   list-style: none;
 }
 
+/* Én rad per todo: beskrivelsen tar plassen som blir til overs, og
+   kontrollene legger seg til høyre. Wrapper på smale skjermer. */
 .todo {
-  padding: 0.5rem 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 0;
   border-bottom: 1px solid lightgray;
+}
+
+.todo .description {
+  flex: 1 1 10rem;
 }
 
 .toggle-form {
