@@ -42,7 +42,7 @@
             <button popovertarget="info-<%= todo.id %>">Info</button>
 
             <div id="info-<%= todo.id %>" popover style="--anchor: --todo-<%= todo.id %>">
-                Opprettet som todo nummer <%= todo.id %>.
+                Opprettet <%= created(todo) %>.
             </div>
         </li>
     <% }); %>

@@ -7,9 +7,21 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const TODOS_FILE = path.join(__dirname, "todos.json");
 
 // Et par eksempler, så lista ikke er tom før skjemaet er bygget.
+// De får ulik createdAt, så popoveren på holdeplass 9 har noe å vise.
+const DAY = 24 * 60 * 60 * 1000;
 const EXAMPLE_TODOS = [
-  { id: 1, description: "Male perrongen", completed: false },
-  { id: 2, description: "Bytte til vinterrutetabell", completed: true },
+  {
+    id: 1,
+    description: "Male perrongen",
+    completed: false,
+    createdAt: new Date(Date.now() - DAY).toISOString(),
+  },
+  {
+    id: 2,
+    description: "Bytte til vinterrutetabell",
+    completed: true,
+    createdAt: new Date(Date.now() - 5 * DAY).toISOString(),
+  },
 ];
 
 if (!fs.existsSync(TODOS_FILE)) {
@@ -24,6 +36,16 @@ const writeTodos = (todos) =>
 // Det er viktig fordi view-transition-name er avledet av id-en.
 let nextId = readTodos().reduce((max, todo) => Math.max(max, todo.id), 0) + 1;
 
+// Teksten popoveren på holdeplass 9 viser. Todos laget før createdAt fantes
+// i modellen har ingen dato — da sier vi det rett ut i stedet for å krasje.
+const created = (todo) =>
+  todo.createdAt
+    ? new Date(todo.createdAt).toLocaleString("no-NO", {
+        dateStyle: "long",
+        timeStyle: "short",
+      })
+    : "et ukjent tidspunkt";
+
 const app = express();
 
 app.set("view engine", "ejs");
@@ -32,7 +54,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use("/static", express.static(path.join(__dirname, "public")));
 
 app.get("/", (req, res) => {
-  res.render("index", { todos: readTodos() });
+  res.render("index", { todos: readTodos(), created });
 });
 
 app.post("/todo", (req, res) => {
@@ -42,6 +64,7 @@ app.post("/todo", (req, res) => {
     id: nextId++,
     description: req.body.description,
     completed: false,
+    createdAt: new Date().toISOString(),
   });
 
   writeTodos(todos);
