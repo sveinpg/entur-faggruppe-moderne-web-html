@@ -222,7 +222,11 @@ skrives ut eller utelates helt.
 
 > 🗣️ **Toggle-knappen kommer til å irritere deg.** Du huker av, og ingenting skjer før du trykker
 > knappen. Det er ikke en bug — det er prisen for regelen om null JavaScript. Én linje
-> `onchange="this.form.submit()"` ville fjernet knappen. Den diskusjonen tar vi på
+> `onchange="this.form.submit()"` ville fjernet knappen.
+>
+> Legg merke til en ting til når du kommer til holdeplass 4: checkboxen og serveren vet ikke om
+> hverandre. Ruta leser aldri feltet — den bare flipper `completed`. Hva betyr det for en bruker
+> som huker av og går videre uten å trykke? Den diskusjonen tar vi på
 > [🏁 Endestasjon](#-endestasjon).
 
 </details>
@@ -580,7 +584,7 @@ Popover-varianten i HTML, hvis du vil prøve:
 
 ```html
 <button popovertarget="info-1">Info</button>
-<div id="info-1" popover>Litt mer informasjon om denne todoen.</div>
+<div id="info-1" popover>Opprettet <%= created(todo) %>.</div>
 ```
 
 </details>
@@ -618,16 +622,19 @@ JavaScript-basert posisjonsberegning.
 <br>
 
 Ankernavnet må være unikt per todo, så det må skrives ut fra serveren — akkurat som
-`view-transition-name` allerede gjøres. I `views/index.ejs`, inne i `<details>`:
+`view-transition-name` allerede gjøres. I `views/index.ejs`, inne i `<li class="todo">`:
 
 ```html
 <button popovertarget="info-<%= todo.id %>">Info</button>
 
 <div id="info-<%= todo.id %>" popover
      style="--anchor: --todo-<%= todo.id %>">
-    Opprettet som todo nummer <%= todo.id %>.
+    Opprettet <%= created(todo) %>.
 </div>
 ```
+
+`created` er en liten hjelper serveren sender med til malen — den formaterer `todo.createdAt`
+til lesbar norsk dato. Se `server.js`.
 
 Og sett ankeret på `<li>`-en, som allerede har en id-basert style-attributt:
 
@@ -831,15 +838,32 @@ skjema av seg selv. Den åpenbare løsningen er én linje JavaScript:
 
 Da oppfører checkboxen seg nøyaktig som folk forventer: huk av, ferdig. Ingen ekstra knapp.
 
-Vi har valgt den bort, og prisen er en «Toggle»-knapp ved siden av hver eneste checkbox.
-Funksjonelt likeverdig, merkbart klumpete.
+Vi har valgt den bort. Prisen ser ut som en ekstra knapp — men den er høyere enn som så.
+
+**Checkboxen kan lyve.** Den er ikke koblet til serveren i det hele tatt: `POST /todo/:id/toggle`
+leser aldri feltet, den bare flipper `completed`. Samtidig reagerer CSS-en du skrev på den
+visuelle tilstanden umiddelbart — gjennomstrekingen fra holdeplass 4 slår inn i det du klikker,
+og filteret fra holdeplass 10 kan skjule raden på flekken.
+
+Prøv selv: huk av en todo, se den bli strøket over, og la være å trykke Toggle. Refresh. Den er
+like uavkrysset som før. Du fikk optimistisk UI gratis, og du fikk ingen garanti for at det
+stemmer.
+
+**Og den lar seg ikke bare fikse.** Det nærliggende svaret er å droppe checkboxen og bruke én
+submit-knapp som viser ☐ eller ☑ — da er ett klikk én runde til serveren, og ingenting kan
+sprike. Men checkboxen er bærende: `:has(input:checked)` driver gjennomstrekingen (holdeplass 4),
+telleren (5) og begge filtrene (10). Fjerner du den, faller fire holdeplasser sammen.
+
+Det er den egentlige begrensningen. Ikke at «en checkbox ikke kan submitte», men at **samme
+element må være både tilstandsmaskin for CSS og skjemafelt for serveren** — og de to rollene vil
+ikke det samme.
 
 > 🗣️ **Ingenting å implementere her** — bare spørsmål verdt å bli litt uenig om:
 >
 > - Er «null JavaScript» et mål i seg selv, eller et middel?
-> - Hvor mye UX er du villig til å ofre for å slippe den linjen?
+> - Er optimistisk UI som ikke kan rulles tilbake bedre eller verre enn ingen tilbakemelding?
 > - Er en inline `onchange` noe annet enn å dra inn et rammeverk? Hvor går forskjellen?
-> - Finnes det en tredje vei som er bedre enn begge?
+> - CSS leser DOM-tilstand, serveren eier sannheten. Hvem burde gitt etter her?
 
 ### 🔜 Der HTML og CSS faktisk tar slutt
 
@@ -864,8 +888,9 @@ todos.json        💾 "Databasen". Slett den for å nullstille.
 CLAUDE.md         🤖 Spilleregler for Claude Code i dette repoet
 ```
 
-Todo-modellen er `{ id, description, completed }`, og de fire rutene står listet i
-[🧱 Etappe 1](#-etappe-1--bygg-appen).
+Todo-modellen er `{ id, description, completed, createdAt }`, og de fire rutene står listet i
+[🧱 Etappe 1](#-etappe-1--bygg-appen). Malen får i tillegg hjelperen `created(todo)`, som
+formaterer `createdAt` til lesbar dato — den brukes av popoveren på holdeplass 9.
 
 > 💡 **En detalj som er gjort for deg:** hver `<li>` har `view-transition-name: todo-<id>`.
 > Navnet må være unikt per element, og det er nettopp derfor id-en er med — noe du får bruk for
