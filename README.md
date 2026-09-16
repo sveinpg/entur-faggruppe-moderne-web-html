@@ -1031,11 +1031,33 @@ gjør noe.
 Og bryteren mellom dem finnes ikke i HTML. Den heter `element.focus({ preventScroll: true })`, og
 den er JavaScript.
 
+**Og det stopper ikke der.** Ta bort `autofocus` igjen, scroll et stykke ned, og slett en todo.
+Du havner fortsatt på toppen.
+
+Hvorfor er **ikke avklart** — og vi lar det stå åpent her med vilje, fordi å finne det ut er en
+bedre øvelse enn å få det servert. Tre ting som hver isolerer én mistenkt:
+
+1. **Trykk Toggle i stedet for Slett.** Samme POST/Redirect/GET, men ingen dialog. Holder
+   posisjonen da, er det dialogen som gjør noe.
+2. **Kommenter ut `@view-transition` og slett igjen.** Holder posisjonen da, forstyrrer
+   overgangen scrollgjenopprettingen.
+3. **Slett noe, og trykk så Tilbake.** Havner du der du sto, *har* nettleseren posisjonen lagret
+   — den bare bruker den ikke framover.
+
+Det kan også hende ingenting er galt: POST/Redirect/GET lager en ny historikkoppføring, og
+nettlesere gjenoppretter normalt bare scroll ved tilbake, fram og reload. Da er toppen riktig
+oppførsel, og det er forventningen din som er feil.
+
+Uansett hvilket svar du lander på, er utveien den samme: `history.scrollRestoration`, og å regne
+ut posisjonen selv. JavaScript igjen.
+
 > 🗣️ Verdt å bli uenig om:
 >
 > - Er dette plattformen som tar slutt, eller er `autofocus` bare feil verktøy her?
 > - Feltet scrolles inn i syne fordi det er ute av syne. Hva om det aldri var det — hjelper
 >   `position: sticky` på skjemaet? (Vi vet ikke. Prøv.)
+> - Du fikk full funksjonalitet uten JavaScript. Du mistet kontrollen over hvor siden står når
+>   den kommer tilbake. Er det en god bytte?
 > - Hvor mange slike kollisjoner tror du det finnes som vi ikke har snublet i ennå?
 
 ### 🔜 Der HTML og CSS faktisk tar slutt
@@ -1048,6 +1070,10 @@ Alt annet i denne appen klarer seg uten JavaScript. Det gjør ikke dette.
 > Her må serveren kunne dytte endringer ut til klientene, og klienten må kunne ta imot dem.
 > Server-sent events og htmx løser det med veldig lite kode — **og det er tema for neste
 > workshop.**
+>
+> Vil du se hvordan det ser ut allerede nå, er `htmx`-branchen i
+> [robinheghan/javazone2026-demo](https://github.com/robinheghan/javazone2026-demo) et godt sted
+> å begynne.
 
 ---
 
@@ -1074,6 +1100,10 @@ formaterer `createdAt` til lesbar dato — den brukes av popoveren på holdeplas
 
 ## 📚 Ressurser
 
+- 🎤 [robinheghan/javazone2026-demo](https://github.com/robinheghan/javazone2026-demo) — «We're
+  making this harder than it needs to be» fra JavaZone 2026. Samme spørsmål som denne workshopen,
+  stilt i Java og Javalin i stedet for Express. Se særlig `htmx`-branchen: den viser hvordan steg
+  to ser ut når du slipper til litt JavaScript igjen.
 - 📖 [MDN: CSS](https://developer.mozilla.org/en-US/docs/Web/CSS)
 - 🧭 [web.dev: Baseline](https://web.dev/baseline)
 - 📊 [Can I use](https://caniuse.com/)
