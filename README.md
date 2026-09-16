@@ -152,10 +152,8 @@ skjema som poster.
 - Serveren leser feltet som `req.body.description` — se `server.js`. Da må `name`-attributtet på
   input-en hete nøyaktig det samme. Dette er hele kontrakten mellom HTML og server.
 - Gi `class="new-todo"` på skjemaet, så treffer grunnstylingen som allerede ligger i CSS-en.
-- `required` gir deg validering uten en eneste linje kode, og `autocomplete="off"` holder
-  nettleserens forslag unna.
-- 🤔 Fristende å legge på `autofocus` også, så markøren står klar i feltet. Ikke gjør det ennå —
-  den har en bieffekt du får se på [🏁 Endestasjon](#-endestasjon).
+- `required` gir deg validering uten en eneste linje kode. `autofocus` setter markøren i feltet
+  ved lasting, og `autocomplete="off"` holder nettleserens forslag unna.
 - Serveren svarer med en redirect tilbake til `/`. Mønsteret heter **POST/Redirect/GET**, og det
   er grunnen til at du kan refreshe etterpå uten å få «vil du sende inn på nytt?».
 
@@ -174,7 +172,7 @@ I `views/index.ejs`, der den første kommentaren står:
 
 ```html
 <form method="POST" action="/todo" class="new-todo">
-    <input placeholder="Ny todo" name="description" autocomplete="off" required />
+    <input placeholder="Ny todo" name="description" autocomplete="off" required autofocus />
     <button type="submit">Legg til</button>
 </form>
 ```
@@ -1079,27 +1077,15 @@ ikke det samme.
 > - Er en inline `onchange` noe annet enn å dra inn et rammeverk? Hvor går forskjellen?
 > - CSS leser DOM-tilstand, serveren eier sannheten. Hvem burde gitt etter her?
 
-### 🎯 Attributten vi ba deg la være
+### 🧭 Hvor ble det av plassen min?
 
-På holdeplass 1 ba vi deg droppe `autofocus`. Her er hvorfor — prøv det gjerne nå, så ser du det
-selv.
+Scroll et stykke ned i lista og slett en todo. Du havner på toppen igjen.
 
-Legg `autofocus` på input-feltet, scroll et stykke ned i lista, og huk av en todo. Du blir kastet
-til toppen av siden. Det skjer på hver eneste handling, fordi alle tre går gjennom
-POST/Redirect/GET, og fokus drar viewporten med seg dit det havner.
+Det skjer på hver handling — legg til, huk av, slett — fordi alle tre går gjennom
+POST/Redirect/GET, altså en ekte sidelasting hver gang.
 
-To innebygde oppførsler som hver for seg er helt riktige: *autofokus setter markøren i feltet*, og
-*fokus scroller elementet inn i syne*. Sammen gir de en app som mister plassen din hver gang du
-gjør noe.
-
-Og bryteren mellom dem finnes ikke i HTML. Den heter `element.focus({ preventScroll: true })`, og
-den er JavaScript.
-
-**Og det stopper ikke der.** Ta bort `autofocus` igjen, scroll et stykke ned, og slett en todo.
-Du havner fortsatt på toppen.
-
-Hvorfor er **ikke avklart** — og vi lar det stå åpent her med vilje, fordi å finne det ut er en
-bedre øvelse enn å få det servert. Tre ting som hver isolerer én mistenkt:
+**Hvorfor er ikke avklart**, og vi lar det stå åpent med vilje: å finne det ut er en bedre øvelse
+enn å få det servert. Tre ting som hver isolerer én mistenkt:
 
 1. **Trykk Toggle i stedet for Slett.** Samme POST/Redirect/GET, men ingen dialog. Holder
    posisjonen da, er det dialogen som gjør noe.
@@ -1117,12 +1103,11 @@ ut posisjonen selv. JavaScript igjen.
 
 > 🗣️ Verdt å bli uenig om:
 >
-> - Er dette plattformen som tar slutt, eller er `autofocus` bare feil verktøy her?
-> - Feltet scrolles inn i syne fordi det er ute av syne. Hva om det aldri var det — hjelper
->   `position: sticky` på skjemaet? (Vi vet ikke. Prøv.)
 > - Du fikk full funksjonalitet uten JavaScript. Du mistet kontrollen over hvor siden står når
 >   den kommer tilbake. Er det en god bytte?
-> - Hvor mange slike kollisjoner tror du det finnes som vi ikke har snublet i ennå?
+> - Hvor mye av dette er egentlig prisen for null JS, og hvor mye er bare hvordan navigasjon
+>   alltid har fungert?
+> - Hvor mange slike detaljer tror du det finnes som vi ikke har snublet i ennå?
 
 ### 🔜 Der HTML og CSS faktisk tar slutt
 
