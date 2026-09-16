@@ -27,7 +27,7 @@ appen, så alt som gjør den fin.
 > ⚠️ **Bruk Chrome 135+.** Det er den eneste nettleseren der hele workshopen virker.
 >
 > Firefox mangler to av tingene vi skal leke med: **cross-document view transitions**
-> (holdeplass 6) og **scroll-drevne animasjoner** (et [🛤️ Sidespor](#-sidespor)). Begge feiler
+> (holdeplass 6) og **scroll-drevne animasjoner** (et [🛤️ sidespor](#sidespor-scroll)). Begge feiler
 > stille — siden fungerer, men du ser ingen effekt og tror du har gjort feil. Safari 26+ skal ha
 > begge, men er ikke testet her.
 >
@@ -78,7 +78,7 @@ Workshopen går i to etapper. **Første etappe bygger appen med HTML** — uten 
 **hele 4–10 hovedruta.** Holdeplass 9 er kort, og den inneholder det tydeligste eksempelet i hele
 workshopen på en avhengighet du kan slette — den er verdt å rekke.
 
-Utenom ruta ligger [🛤️ Sidespor](#-sidespor): frivillige omveier for deg som blir tidlig ferdig
+Utenom ruta ligger [🛤️ Sidespor](#sidespor): frivillige omveier for deg som blir tidlig ferdig
 eller vil grave dypere i noe du nettopp bygget.
 
 Hvert steg har 💡 **Hint** og ✅ **Løsningsforslag** i utslåbare blokker. Løsningsforslaget er
@@ -291,9 +291,6 @@ faktisk sletter. Fortsatt null JavaScript.
 🔑 **Poenget:** en modal med backdrop, fokushåndtering, Escape-lukking og en destruktiv handling
 bak bekreftelse — null JavaScript. For få år siden var dette et bibliotek.
 
-🎁 **Bonus:** vil du gjemme Delete-knappen til man ber om den, pakk den i en `<details>` med en
-`<summary>`. Enda et HTML-element som gjør en JS-jobb.
-
 </details>
 
 ---
@@ -395,8 +392,8 @@ serveren teller for deg.
 }
 ```
 
-🎁 **Bonus:** to tellere samtidig gir deg «3 av 7 fullført» — se
-[🛤️ Sidespor](#-sidespor).
+🎁 **Bonus:** to tellere samtidig gir deg «3 av 7 fullført» — se sidesporet
+[«X av Y fullført»](#sidespor-tellere).
 
 </details>
 
@@ -481,8 +478,8 @@ Tre ting å gjøre før du skriver en eneste regel:
 kommer til eller forsvinner. Todos som finnes i begge tilstander får den innebygde
 morph-animasjonen, som er akkurat det vi vil ha når en todo bare flytter på seg.
 
-Vil du gruppere flere navn under én regel, ligger `view-transition-class` på
-[🛤️ Sidespor](#-sidespor).
+Vil du gruppere flere navn under én regel, ligger `view-transition-class` på sidesporet
+[Grupper overganger](#sidespor-transition-class).
 
 </details>
 
@@ -610,6 +607,9 @@ Popover-varianten i HTML — den bruker du igjen på holdeplass 9:
 <div id="info-1" popover>Opprettet <%= created(todo) %>.</div>
 ```
 
+Når du har begge i appen, er det verdt å kjenne forskjellen på dem — se sidesporet
+[Popover eller dialog?](#sidespor-popover-dialog).
+
 </details>
 
 ---
@@ -676,8 +676,8 @@ Prøv å scrolle så popoveren ikke får plass under knappen — `position-try-f
 av seg selv. Det er den funksjonen folk ellers installerer et bibliotek for.
 
 > 🛤️ **Vil du ankre til noe annet enn knappen** — hele raden, for eksempel — må du navngi ankeret
-> selv, og da støter du på at navn må være unike per todo. Den varianten ligger på
-> [🛤️ Sidespor](#-sidespor).
+> selv, og da støter du på at navn må være unike per todo. Den varianten ligger på sidesporet
+> [Ulikt anker per element](#sidespor-anker).
 
 </details>
 
@@ -749,11 +749,13 @@ kjører bare på elementer som faktisk genererer en boks. Filtrering og telling 
 du vil eller ikke.
 
 Er det ønsket oppførsel? Og hvis svaret er nei: hva kan du bruke i stedet for `display: none`?
-Det spørsmålet har fått sitt eget [🛤️ Sidespor](#-sidespor).
+Det spørsmålet har fått sitt eget sidespor: [Telleren som forsvinner](#sidespor-teller-filter).
 
 </details>
 
 ---
+
+<a id="sidespor"></a>
 
 ## 🛤️ Sidespor
 
@@ -763,6 +765,8 @@ noe spesielt — ta dem i hvilken rekkefølge du vil, og hopp over resten uten d
 Hvert sidespor sier hva det bygger på, hva det lærer bort, og omtrent hvor lenge det tar.
 
 ---
+
+<a id="sidespor-scroll"></a>
 
 ### 📜 Scroll-drevne animasjoner
 
@@ -859,6 +863,8 @@ Koden ligger ferdig på branchen `losning/holdeplass-11`.
 
 ---
 
+<a id="sidespor-anker"></a>
+
 ### 🧭 Ulikt anker per element
 
 > **Bygger på:** holdeplass 9 · **Lærer bort:** hvordan én CSS-regel får ulik verdi per element ·
@@ -922,6 +928,8 @@ verdien kommer per element. Samme mønster løser alt som må være unikt per el
 
 ---
 
+<a id="sidespor-tellere"></a>
+
 ### 🔢 «X av Y fullført»
 
 > **Bygger på:** holdeplass 5 · **Lærer bort:** flere tellere samtidig · **Tid:** ~10 min
@@ -932,6 +940,8 @@ som teller ulike ting i samme liste. Nummerer gjerne todoene med en tredje mens 
 📖 [MDN: Using CSS counters](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_counter_styles/Using_CSS_counters)
 
 ---
+
+<a id="sidespor-transition-class"></a>
 
 ### 🎞️ Grupper overganger med `view-transition-class`
 
@@ -945,6 +955,8 @@ gi fullførte og aktive todos hver sin overgang.
 📖 [MDN: `view-transition-class`](https://developer.mozilla.org/en-US/docs/Web/CSS/view-transition-class)
 
 ---
+
+<a id="sidespor-popover-dialog"></a>
 
 ### 💬 Popover eller dialog?
 
@@ -965,6 +977,8 @@ løftes til top layer?
 
 ---
 
+<a id="sidespor-teller-filter"></a>
+
 ### 🔍 Telleren som forsvinner
 
 > **Bygger på:** holdeplass 5 og 10 · **Lærer bort:** hva `display: none` egentlig gjør ·
@@ -981,6 +995,33 @@ forskjellige ting i CSS, og at du må velge hvilken du mener.
 📖 [MDN: `display`](https://developer.mozilla.org/en-US/docs/Web/CSS/display) ·
 [MDN: `visibility`](https://developer.mozilla.org/en-US/docs/Web/CSS/visibility) ·
 [MDN: `content-visibility`](https://developer.mozilla.org/en-US/docs/Web/CSS/content-visibility)
+
+---
+
+<a id="sidespor-ting-vi-ikke-rakk"></a>
+
+### 🧰 Ting vi ikke rakk
+
+Ingen oppgaver her — bare plattformting som ville passet i nettopp denne appen, hvis du vil rote
+videre på egen hånd.
+
+- **[`<details>` / `<summary>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/details)**
+  — gjem Slett-knappen til noen ber om den. Gammelt element, men verdt å nevne: hvert eneste hint
+  og løsningsforslag i denne guiden er bygget av det.
+- **[`accent-color`](https://developer.mozilla.org/en-US/docs/Web/CSS/accent-color)** — gi
+  checkboxene farge uten å bygge dem på nytt fra bunnen.
+- **[`:user-invalid`](https://developer.mozilla.org/en-US/docs/Web/CSS/:user-invalid)** — marker
+  det tomme feltet rødt *først etter* at noen har prøvd, ikke med en gang siden lastes.
+- **[`@container`](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_containment/Container_queries)**
+  — la todo-raden stille om etter sin egen bredde i stedet for vinduets.
+- **[`light-dark()`](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/light-dark)** —
+  mørk modus uten å duplisere hele paletten i en media query.
+- **[`text-wrap: pretty`](https://developer.mozilla.org/en-US/docs/Web/CSS/text-wrap)** — hindrer
+  at lange beskrivelser ender med ett enslig ord på siste linje.
+- **[`field-sizing: content`](https://developer.mozilla.org/en-US/docs/Web/CSS/field-sizing)** —
+  input-feltet vokser med det du skriver. Ferskt, og Chrome-først.
+- **[`interpolate-size`](https://developer.mozilla.org/en-US/docs/Web/CSS/interpolate-size)** —
+  animer høyde til og fra `auto`, som ellers er umulig. Også ferskt.
 
 ---
 
