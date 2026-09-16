@@ -1070,10 +1070,6 @@ Alt annet i denne appen klarer seg uten JavaScript. Det gjør ikke dette.
 > Her må serveren kunne dytte endringer ut til klientene, og klienten må kunne ta imot dem.
 > Server-sent events og htmx løser det med veldig lite kode — **og det er tema for neste
 > workshop.**
->
-> Vil du se hvordan det ser ut allerede nå, er `htmx`-branchen i
-> [robinheghan/javazone2026-demo](https://github.com/robinheghan/javazone2026-demo) et godt sted
-> å begynne.
 
 ---
 
@@ -1100,10 +1096,6 @@ formaterer `createdAt` til lesbar dato — den brukes av popoveren på holdeplas
 
 ## 📚 Ressurser
 
-- 🎤 [robinheghan/javazone2026-demo](https://github.com/robinheghan/javazone2026-demo) — «We're
-  making this harder than it needs to be» fra JavaZone 2026. Samme spørsmål som denne workshopen,
-  stilt i Java og Javalin i stedet for Express. Se særlig `htmx`-branchen: den viser hvordan steg
-  to ser ut når du slipper til litt JavaScript igjen.
 - 📖 [MDN: CSS](https://developer.mozilla.org/en-US/docs/Web/CSS)
 - 🧭 [web.dev: Baseline](https://web.dev/baseline)
 - 📊 [Can I use](https://caniuse.com/)
