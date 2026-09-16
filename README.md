@@ -600,12 +600,19 @@ dialog::backdrop {
 }
 ```
 
-Popover-varianten i HTML — den bruker du igjen på holdeplass 9:
+Popover-varianten i HTML. Legg den inne i `<li class="todo">`, ved siden av Slett-knappen — den
+bruker du igjen på holdeplass 9. Id-en må være unik per todo, akkurat som for dialogen:
 
 ```html
-<button popovertarget="info-1">Info</button>
-<div id="info-1" popover>Opprettet <%= created(todo) %>.</div>
+<button popovertarget="info-<%= todo.id %>">Info</button>
+
+<div id="info-<%= todo.id %>" popover>
+    Opprettet <%= created(todo) %>.
+</div>
 ```
+
+`created` er en hjelper serveren sender med til malen — den formaterer `todo.createdAt` til
+lesbar norsk dato. Se `server.js`.
 
 Når du har begge i appen, er det verdt å kjenne forskjellen på dem — se sidesporet
 [Popover eller dialog?](#sidespor-popover-dialog).
