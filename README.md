@@ -76,7 +76,9 @@ Workshopen går i to etapper. **Første etappe bygger appen med HTML** — uten 
 | 11 | [Scroll-effekter](#holdeplass-11-scroll-effekter) | 📜 Scroll-drevne animasjoner |
 
 **Etappe 1 er obligatorisk** — den tar ikke lang tid, og resten bygger på den. I etappe 2 er
-**4–8 hovedruta**, og **9–11 utflukter** for de som kommer raskt fram.
+**4–9 hovedruta**, og **10–11 utflukter** for de som kommer raskt fram. Holdeplass 9 er kort, og
+den inneholder det tydeligste eksempelet i hele workshopen på en avhengighet du kan slette — den
+er verdt å rekke.
 
 Utenom ruta ligger [🛤️ Sidespor](#-sidespor): frivillige omveier for deg som blir tidlig ferdig
 eller vil grave dypere i noe du nettopp bygget.
@@ -796,17 +798,19 @@ faktisk scroller først.
 }
 
 @supports (animation-timeline: view()) {
-  .todo {
+  .todo .description {
     animation: reveal linear both;
     animation-timeline: view();
     animation-range: entry 0% entry 60%;
   }
 }
-
-@media (prefers-reduced-motion: reduce) {
-  .todo { animation: none; }
-}
 ```
+
+⚠️ **Legg merke til at animasjonen ligger på `.description`, ikke på `.todo`.** Det er ikke
+tilfeldig: `both` beholder animasjonens verdier også utenfor den aktive perioden, og animasjoner
+slår transitions i kaskaden. Legger du den på `.todo`, låser du `opacity` og `translate` der — og
+innglidningen du bygde på holdeplass 7 slutter å virke. Flytt effekten til et innerelement, så
+lever begge to.
 
 Fremdriftsindikator:
 
@@ -825,6 +829,16 @@ body::before {
   transform-origin: left;
   animation: grow linear both;
   animation-timeline: scroll(root block);
+}
+```
+
+Og til slutt: skru av begge for dem som har bedt om mindre bevegelse. Husk at
+fremdriftsindikatoren også er en animasjon — det er lett å glemme den.
+
+```css
+@media (prefers-reduced-motion: reduce) {
+  .todo .description,
+  body::before { animation: none; }
 }
 ```
 
