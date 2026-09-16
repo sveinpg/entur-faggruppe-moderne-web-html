@@ -151,8 +151,10 @@ skjema som poster.
 - Serveren leser feltet som `req.body.description` — se `server.js`. Da må `name`-attributtet på
   input-en hete nøyaktig det samme. Dette er hele kontrakten mellom HTML og server.
 - Gi `class="new-todo"` på skjemaet, så treffer grunnstylingen som allerede ligger i CSS-en.
-- `required` gir deg validering uten en eneste linje kode. `autofocus` setter markøren i feltet
-  ved lasting, og `autocomplete="off"` holder nettleserens forslag unna.
+- `required` gir deg validering uten en eneste linje kode, og `autocomplete="off"` holder
+  nettleserens forslag unna.
+- 🤔 Fristende å legge på `autofocus` også, så markøren står klar i feltet. Ikke gjør det ennå —
+  den har en bieffekt du får se på [🏁 Endestasjon](#-endestasjon).
 - Serveren svarer med en redirect tilbake til `/`. Mønsteret heter **POST/Redirect/GET**, og det
   er grunnen til at du kan refreshe etterpå uten å få «vil du sende inn på nytt?».
 
@@ -171,7 +173,7 @@ I `views/index.ejs`, der den første kommentaren står:
 
 ```html
 <form method="POST" action="/todo" class="new-todo">
-    <input placeholder="Ny todo" name="description" autocomplete="off" required autofocus />
+    <input placeholder="Ny todo" name="description" autocomplete="off" required />
     <button type="submit">Legg til</button>
 </form>
 ```
@@ -417,6 +419,16 @@ på tvers av sidelastninger.
 **🎯 Oppgave:** Utforsk hva som allerede skjer, og tilpass animasjonene. Gi nye og slettede todos
 ulik overgang.
 
+Tre ting å gjøre før du skriver en eneste regel:
+
+1. **Legg inn åtte-ti todos.** Med tre-fire ser du nesten ingenting av det som følger.
+2. **Slå av `@view-transition`-regelen i `public/index.css`, legg til en todo, og slå den på
+   igjen.** Forskjellen du ser der er nøyaktig hva denne holdeplassen handler om — og mindre enn
+   du tror, for nettleseren gjør allerede en del av jobben på egen hånd.
+3. **Slett en todo fra midten av lista** og se på radene under. De glir oppover i stedet for å
+   hoppe. Ingen har bedt om den animasjonen; den følger av at hver `<li>` har et unikt
+   `view-transition-name`, så nettleseren kjenner igjen samme todo i to forskjellige dokumenter.
+
 <details>
 <summary>💡 <b>Hint</b></summary>
 
@@ -430,6 +442,11 @@ ulik overgang.
   «ny todo»-animasjon. Et som forsvinner har bare `::view-transition-old`.
 - `view-transition-name` må være unikt per side. Derfor er id-en med i navnet.
 - 🛠️ DevTools → Animations lar deg sakke ned avspillingen.
+- ⚠️ Får du `AbortError: Transition was skipped` i konsollen, er navnene som regel ikke unike.
+  To elementer med samme `view-transition-name` gjør at hele overgangen droppes — sjekk at
+  `<%= todo.id %>` faktisk er med i navnet.
+- ⚠️ Refresh utløser **ingen** overgang. `navigation: auto` gjelder ikke reload, adresselinja
+  eller bokmerker. Bruk skjemaene i appen når du tester.
 
 📖 [MDN: View Transition API](https://developer.mozilla.org/en-US/docs/Web/API/View_Transition_API) ·
 [MDN: `@view-transition`](https://developer.mozilla.org/en-US/docs/Web/CSS/@view-transition)
@@ -998,9 +1015,33 @@ ikke det samme.
 > - Er en inline `onchange` noe annet enn å dra inn et rammeverk? Hvor går forskjellen?
 > - CSS leser DOM-tilstand, serveren eier sannheten. Hvem burde gitt etter her?
 
+### 🎯 Attributten vi ba deg la være
+
+På holdeplass 1 ba vi deg droppe `autofocus`. Her er hvorfor — prøv det gjerne nå, så ser du det
+selv.
+
+Legg `autofocus` på input-feltet, scroll et stykke ned i lista, og huk av en todo. Du blir kastet
+til toppen av siden. Det skjer på hver eneste handling, fordi alle tre går gjennom
+POST/Redirect/GET, og fokus drar viewporten med seg dit det havner.
+
+To innebygde oppførsler som hver for seg er helt riktige: *autofokus setter markøren i feltet*, og
+*fokus scroller elementet inn i syne*. Sammen gir de en app som mister plassen din hver gang du
+gjør noe.
+
+Og bryteren mellom dem finnes ikke i HTML. Den heter `element.focus({ preventScroll: true })`, og
+den er JavaScript.
+
+> 🗣️ Verdt å bli uenig om:
+>
+> - Er dette plattformen som tar slutt, eller er `autofocus` bare feil verktøy her?
+> - Feltet scrolles inn i syne fordi det er ute av syne. Hva om det aldri var det — hjelper
+>   `position: sticky` på skjemaet? (Vi vet ikke. Prøv.)
+> - Hvor mange slike kollisjoner tror du det finnes som vi ikke har snublet i ennå?
+
 ### 🔜 Der HTML og CSS faktisk tar slutt
 
-Ett konkret svar på spørsmålet om hvor grensen går: **live oppdatering på tvers av klienter.**
+Et annet konkret svar på spørsmålet om hvor grensen går: **live oppdatering på tvers av
+klienter.**
 Åpne appen i to faner og legg til en todo i den ene — den andre vet ingenting før du refresher.
 Alt annet i denne appen klarer seg uten JavaScript. Det gjør ikke dette.
 
