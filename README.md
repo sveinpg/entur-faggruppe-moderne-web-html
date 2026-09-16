@@ -27,9 +27,9 @@ appen, så alt som gjør den fin.
 > ⚠️ **Bruk Chrome 135+.** Det er den eneste nettleseren der hele workshopen virker.
 >
 > Firefox mangler to av tingene vi skal leke med: **cross-document view transitions**
-> (holdeplass 6) og **scroll-drevne animasjoner** (holdeplass 11). Begge feiler stille — siden
-> fungerer, men du ser ingen effekt og tror du har gjort feil. Safari 26+ skal ha begge, men er
-> ikke testet her.
+> (holdeplass 6) og **scroll-drevne animasjoner** (et [🛤️ Sidespor](#-sidespor)). Begge feiler
+> stille — siden fungerer, men du ser ingen effekt og tror du har gjort feil. Safari 26+ skal ha
+> begge, men er ikke testet her.
 >
 > Uansett nettleser: den må være ny. `command`/`commandfor` er ferskt, og på en eldre nettleser
 > skjer det rett og slett ingenting når du trykker Slett — da faller holdeplass 3 sammen.
@@ -73,12 +73,10 @@ Workshopen går i to etapper. **Første etappe bygger appen med HTML** — uten 
 | 8 | [Style dialogen](#holdeplass-8-style-dialogen-du-bygde) | 💅 `::backdrop` & popover |
 | 9 | [Tooltip på plass](#holdeplass-9-tooltip-på-plass-med-anchor-positioning) | 📌 Anchor positioning |
 | 10 | [Filtrering](#holdeplass-10-filtrering-uten-en-eneste-linje-js) | 🔍 `:has()` igjen |
-| 11 | [Scroll-effekter](#holdeplass-11-scroll-effekter) | 📜 Scroll-drevne animasjoner |
 
 **Etappe 1 er obligatorisk** — den tar ikke lang tid, og resten bygger på den. I etappe 2 er
-**4–9 hovedruta**, og **10–11 utflukter** for de som kommer raskt fram. Holdeplass 9 er kort, og
-den inneholder det tydeligste eksempelet i hele workshopen på en avhengighet du kan slette — den
-er verdt å rekke.
+**hele 4–10 hovedruta.** Holdeplass 9 er kort, og den inneholder det tydeligste eksempelet i hele
+workshopen på en avhengighet du kan slette — den er verdt å rekke.
 
 Utenom ruta ligger [🛤️ Sidespor](#-sidespor): frivillige omveier for deg som blir tidlig ferdig
 eller vil grave dypere i noe du nettopp bygget.
@@ -94,8 +92,9 @@ Hvert steg har 💡 **Hint** og ✅ **Løsningsforslag** i utslåbare blokker. L
 > git switch main                    # tilbake til din egen kode
 > ```
 >
-> `losning/holdeplass-01` til `losning/holdeplass-11`, der den siste er hele appen ferdig. Husk
-> å committe eller stashe ditt eget arbeid før du bytter.
+> `losning/holdeplass-01` til `losning/holdeplass-10` følger holdeplassene. `losning/holdeplass-11`
+> er hele appen ferdig, inkludert scroll-sidesporet. Husk å committe eller stashe ditt eget
+> arbeid før du bytter.
 >
 > Branchene inneholder **bare koden** — denne guiden ligger på `main`. Trenger du den mens du
 > står på en løsningsbranch, les den [på GitHub](https://github.com/sveinpg/entur-faggruppe-moderne-web-html#readme)
@@ -756,30 +755,44 @@ Det spørsmålet har fått sitt eget [🛤️ Sidespor](#-sidespor).
 
 ---
 
-### Holdeplass 11: Scroll-effekter
+## 🛤️ Sidespor
 
-**🎯 Oppgave:** Animer elementer basert på scroll-posisjon. Legg inn nok todos til at siden
-faktisk scroller først.
+Omveier som ikke ligger på ruta. De er her for deg som blir tidlig ferdig, eller som vil grave i
+noe spesielt — ta dem i hvilken rekkefølge du vil, og hopp over resten uten dårlig samvittighet.
+
+Hvert sidespor sier hva det bygger på, hva det lærer bort, og omtrent hvor lenge det tar.
+
+---
+
+### 📜 Scroll-drevne animasjoner
+
+> **Bygger på:** hele appen · **Lærer bort:** animasjon styrt av scroll i stedet for av klokka ·
+> **Tid:** ~25 min · **Kun Chrome**
+
+To tidslinjer som ikke finnes i vanlig CSS: `scroll()` følger hvor langt en container har kommet,
+`view()` følger hvor et element er i viewporten. Med dem kan du animere uten en eneste
+millisekundverdi — varigheten er scrollen.
+
+⚠️ **Tre ting som gjør at du tror det ikke virker:**
+
+1. **Du trenger mange todos.** Tjue eller flere. Scroller ikke siden, finnes det ingen tidslinje.
+2. **Firefox støtter det ikke.** `@supports`-guarden gjør at siden fungerer — du ser bare
+   ingenting. Bytt til Chrome.
+3. **`entry`-området er kortere enn du tror.** `entry 0% entry 60%` er ferdig etter at elementet
+   så vidt har kommet inn, altså over én radhøyde med scrolling. På en 60 piksler høy rad rekker
+   du ikke å se det. Prøv `entry 0% cover 30%` i stedet — da varer det lenge nok til å merkes.
 
 <details>
 <summary>💡 <b>Hint</b></summary>
 
 <br>
 
-- To tidslinjer: `scroll()` (hvor langt containeren har kommet) og `view()` (hvor elementet er i
-  viewporten).
-- `animation-timeline: view();` + `animation-range: entry 0% cover 30%;` gir den klassiske «fade
-  inn når den kommer til syne»-effekten.
-- 📊 Fremdriftsindikator på toppen: et fast posisjonert element med
-  `animation-timeline: scroll(root block);` og `scaleX` fra 0 til 1.
-- Animasjonen må ha `animation-name` og `animation-duration: auto` — varigheten styres av
-  tidslinjen, ikke av klokka.
-- ♿ Pakk inn i `@supports (animation-timeline: view())` og respekter `prefers-reduced-motion`.
-- ⚠️ **Firefox støtter ikke dette ennå.** `@supports`-guarden gjør at siden fortsatt fungerer,
-  men du ser ingen effekt. Bytt til Chrome på denne holdeplassen.
-- ⚠️ `animation: … both` låser `opacity` og `transform` på `.todo` og overstyrer transitionen fra
-  holdeplass 7. Ikke en bug — det er kaskaden. Enten dropper du den effekten her, eller så flytter
-  du scroll-animasjonen til et innerelement.
+- `animation-timeline: view();` kobler animasjonen til elementets ferd gjennom viewporten.
+- `animation-range` bestemmer *hvilken del* av den ferden som animeres.
+- 📊 Fremdriftsindikator: et fast posisjonert element med `animation-timeline: scroll(root block);`
+  som går fra `scaleX(0)` til `scaleX(1)`.
+- ♿ Pakk inn i `@supports (animation-timeline: view())`, og skru av under
+  `prefers-reduced-motion`. Husk at indikatoren også er en animasjon.
 
 📖 [MDN: Scroll-driven animations](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_scroll-driven_animations) ·
 [scroll-driven-animations.style](https://scroll-driven-animations.style/)
@@ -806,11 +819,10 @@ faktisk scroller først.
 }
 ```
 
-⚠️ **Legg merke til at animasjonen ligger på `.description`, ikke på `.todo`.** Det er ikke
-tilfeldig: `both` beholder animasjonens verdier også utenfor den aktive perioden, og animasjoner
-slår transitions i kaskaden. Legger du den på `.todo`, låser du `opacity` og `translate` der — og
-innglidningen du bygde på holdeplass 7 slutter å virke. Flytt effekten til et innerelement, så
-lever begge to.
+⚠️ **Animasjonen ligger på `.description`, ikke på `.todo`.** `both` beholder animasjonens verdier
+også utenfor den aktive perioden, og animasjoner slår transitions i kaskaden. Legger du den på
+`.todo`, låser du `opacity` og `translate` der — og innglidningen fra holdeplass 7 slutter å
+virke.
 
 Fremdriftsindikator:
 
@@ -832,8 +844,7 @@ body::before {
 }
 ```
 
-Og til slutt: skru av begge for dem som har bedt om mindre bevegelse. Husk at
-fremdriftsindikatoren også er en animasjon — det er lett å glemme den.
+Og til slutt, for dem som har bedt om mindre bevegelse:
 
 ```css
 @media (prefers-reduced-motion: reduce) {
@@ -842,18 +853,9 @@ fremdriftsindikatoren også er en animasjon — det er lett å glemme den.
 }
 ```
 
+Koden ligger ferdig på branchen `losning/holdeplass-11`.
+
 </details>
-
----
-
----
-
-## 🛤️ Sidespor
-
-Omveier som ikke ligger på ruta. De er her for deg som blir tidlig ferdig, eller som vil grave i
-noe spesielt — ta dem i hvilken rekkefølge du vil, og hopp over resten uten dårlig samvittighet.
-
-Hvert sidespor sier hva det bygger på, hva det lærer bort, og omtrent hvor lenge det tar.
 
 ---
 
