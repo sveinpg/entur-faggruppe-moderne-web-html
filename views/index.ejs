@@ -38,6 +38,12 @@
                     </div>
                 </form>
             </dialog>
+
+            <button popovertarget="info-<%= todo.id %>">Info</button>
+
+            <div id="info-<%= todo.id %>" popover>
+                Opprettet <%= created(todo) %>.
+            </div>
         </li>
     <% }); %>
     </ul>
