@@ -69,13 +69,12 @@ Workshopen går i to etapper. **Første etappe bygger appen med HTML** — uten 
 | 4 | [Gjennomstreking](#holdeplass-4-gjennomstreking-med-has) | 🔍 `:has()` |
 | 5 | [Antall gjenstående](#holdeplass-5-antall-gjenstående-med-css-counters) | 🔢 CSS counters |
 | 6 | [Sideoverganger](#holdeplass-6-sideoverganger-med-view-transitions) | 🎞️ View Transitions |
-| 7 | [Nye todos glir inn](#holdeplass-7-nye-todos-glir-inn-med-starting-style) | ✨ `@starting-style` |
-| 8 | [Style dialogen](#holdeplass-8-style-dialogen-du-bygde) | 💅 `::backdrop` & popover |
-| 9 | [Tooltip på plass](#holdeplass-9-tooltip-på-plass-med-anchor-positioning) | 📌 Anchor positioning |
-| 10 | [Filtrering](#holdeplass-10-filtrering-uten-en-eneste-linje-js) | 🔍 `:has()` igjen |
+| 7 | [Style dialogen](#holdeplass-7-style-dialogen-du-bygde) | 💅 `::backdrop`, `@starting-style` & popover |
+| 8 | [Tooltip på plass](#holdeplass-8-tooltip-på-plass-med-anchor-positioning) | 📌 Anchor positioning |
+| 9 | [Filtrering](#holdeplass-9-filtrering-uten-en-eneste-linje-js) | 🔍 `:has()` igjen |
 
 **Etappe 1 er obligatorisk** — den tar ikke lang tid, og resten bygger på den. I etappe 2 er
-**hele 4–10 hovedruta.** Holdeplass 9 er kort, og den inneholder det tydeligste eksempelet i hele
+**hele 4–9 hovedruta.** Holdeplass 8 er kort, og den inneholder det tydeligste eksempelet i hele
 workshopen på en avhengighet du kan slette — den er verdt å rekke.
 
 Utenom ruta ligger [🛤️ Sidespor](#sidespor): frivillige omveier for deg som blir tidlig ferdig
@@ -92,7 +91,7 @@ Hvert steg har 💡 **Hint** og ✅ **Løsningsforslag** i utslåbare blokker. L
 > git switch main                    # tilbake til din egen kode
 > ```
 >
-> `losning/holdeplass-01` til `losning/holdeplass-10` følger holdeplassene. `losning/holdeplass-11`
+> `losning/holdeplass-01` til `losning/holdeplass-09` følger holdeplassene. `losning/holdeplass-10`
 > er hele appen ferdig, inkludert scroll-sidesporet. Husk å committe eller stashe ditt eget
 > arbeid før du bytter.
 >
@@ -483,62 +482,18 @@ Vil du gruppere flere navn under én regel, ligger `view-transition-class` på s
 
 ---
 
-### Holdeplass 7: Nye todos glir inn med `@starting-style`
-
-View transitions dekker navigasjoner. `@starting-style` dekker det mer generelle tilfellet: hva
-skal et element animere **fra** når det dukker opp for første gang?
-
-**🎯 Oppgave:** Animer nye todos inn i lista.
-
-<details>
-<summary>💡 <b>Hint</b></summary>
-
-<br>
-
-- Et element som nettopp er lagt til i DOM-en har ingen «forrige» verdi å transitionere fra —
-  `@starting-style` gir den.
-- Formen er: sluttilstanden på selektoren, starttilstanden i `@starting-style { .todo { … } }`.
-- Du trenger en `transition` på elementet for at det skal skje noe.
-- For elementer som forsvinner trenger du `transition-behavior: allow-discrete` — `display` kan
-  ikke transitionere uten.
-
-📖 [MDN: `@starting-style`](https://developer.mozilla.org/en-US/docs/Web/CSS/@starting-style) ·
-[MDN: `transition-behavior`](https://developer.mozilla.org/en-US/docs/Web/CSS/transition-behavior)
-
-</details>
-
-<details>
-<summary>✅ <b>Løsningsforslag</b></summary>
-
-<br>
-
-```css
-.todo {
-  opacity: 1;
-  translate: 0;
-  transition: opacity 300ms ease, translate 300ms ease;
-}
-
-@starting-style {
-  .todo {
-    opacity: 0;
-    translate: 0 -1rem;
-  }
-}
-```
-
-⚠️ Dette og view transitions kan komme i veien for hverandre. Verdt å tenke over: når er
-`@starting-style` riktig verktøy, og når er view transitions det?
-
-</details>
-
----
-
-### Holdeplass 8: Style dialogen du bygde
+### Holdeplass 7: Style dialogen du bygde
 
 Dialogen du bygde i [holdeplass 3](#holdeplass-3-slett-med-bekreftelse) virker, men ser ut som
 en dialog fra 2011. Nettleseren gir deg backdrop, fokushåndtering og Escape gratis — resten er
 din.
+
+Det er også her `@starting-style` hører hjemme. En dialog som nettopp ble åpnet har ingen
+«forrige» verdi å transitionere fra, så uten hjelp popper den rett inn — og på veien ut må du
+si fra at `display` og `overlay` skal få lov til å vente på animasjonen. Det er det samme
+problemet som på holdeplass 6, sett fra en annen kant: **view transitions dekker det som skjer
+over en navigasjon, `@starting-style` dekker elementer som dukker opp midt i et dokument som
+allerede står der.**
 
 **🎯 Oppgave:** Style dialogen, inkludert backdrop og åpne-/lukke-animasjon. Utforsk deretter
 popover som alternativ.
@@ -549,8 +504,10 @@ popover som alternativ.
 <br>
 
 - `dialog::backdrop` styles som et vanlig element: `background`, `backdrop-filter`, animasjoner.
-- `dialog:open` (eller `dialog[open]`) er tilstanden når den er åpen — kombiner med
-  `@starting-style` fra forrige steg.
+- `dialog:open` (eller `dialog[open]`) er tilstanden når den er åpen.
+- Formen på `@starting-style` er: sluttilstanden på selektoren, starttilstanden inni
+  `@starting-style { … }`. Og du trenger en `transition` på elementet for at det skal skje noe
+  i det hele tatt.
 - For å animere **lukking** trenger du `transition-behavior: allow-discrete` på `display` og
   `overlay`.
 - Popover-varianten: `<button popovertarget="…">` + `<div popover>`. Lettere enn dialog, men ikke
@@ -559,6 +516,8 @@ popover som alternativ.
   `toggle-popover`.
 
 📖 [MDN: `<dialog>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dialog) ·
+[MDN: `@starting-style`](https://developer.mozilla.org/en-US/docs/Web/CSS/@starting-style) ·
+[MDN: `transition-behavior`](https://developer.mozilla.org/en-US/docs/Web/CSS/transition-behavior) ·
 [MDN: Popover API](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API) ·
 [MDN: `command`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#command)
 
@@ -599,7 +558,7 @@ dialog::backdrop {
 ```
 
 Popover-varianten i HTML. Legg den inne i `<li class="todo">`, ved siden av Slett-knappen — den
-bruker du igjen på holdeplass 9. Id-en må være unik per todo, akkurat som for dialogen:
+bruker du igjen på holdeplass 8. Id-en må være unik per todo, akkurat som for dialogen:
 
 ```html
 <button popovertarget="info-<%= todo.id %>">Info</button>
@@ -619,7 +578,7 @@ Når du har begge i appen, er det verdt å kjenne forskjellen på dem — se sid
 
 ---
 
-### Holdeplass 9: Tooltip på plass med anchor positioning
+### Holdeplass 8: Tooltip på plass med anchor positioning
 
 **🎯 Oppgave:** Posisjoner en tooltip eller popover relativt til en bestemt todo — uten
 JavaScript-basert posisjonsberegning.
@@ -647,7 +606,7 @@ JavaScript-basert posisjonsberegning.
 
 <br>
 
-Markupen er den samme som på holdeplass 8 — ingenting nytt trengs:
+Markupen er den samme som på holdeplass 7 — ingenting nytt trengs:
 
 ```html
 <button popovertarget="info-<%= todo.id %>">Info</button>
@@ -688,7 +647,7 @@ av seg selv. Det er den funksjonen folk ellers installerer et bibliotek for.
 
 ---
 
-### Holdeplass 10: Filtrering uten en eneste linje JS
+### Holdeplass 9: Filtrering uten en eneste linje JS
 
 **🎯 Oppgave:** Legg til filtrering — alle / aktive / fullførte — med radioknapper. Ingen
 server-runde, ingen JavaScript.
@@ -830,8 +789,9 @@ millisekundverdi — varigheten er scrollen.
 
 ⚠️ **Animasjonen ligger på `.description`, ikke på `.todo`.** `both` beholder animasjonens verdier
 også utenfor den aktive perioden, og animasjoner slår transitions i kaskaden. Legger du den på
-`.todo`, låser du `opacity` og `translate` der — og innglidningen fra holdeplass 7 slutter å
-virke.
+`.todo`, låser du `opacity` og `translate` der for godt — og alt annet som vil røre de to
+egenskapene på raden, enten det er en hover-transition eller en `@starting-style` du legger på
+senere, slutter å virke.
 
 Fremdriftsindikator:
 
@@ -862,7 +822,7 @@ Og til slutt, for dem som har bedt om mindre bevegelse:
 }
 ```
 
-Koden ligger ferdig på branchen `losning/holdeplass-11`.
+Koden ligger ferdig på branchen `losning/holdeplass-10`.
 
 </details>
 
@@ -872,10 +832,10 @@ Koden ligger ferdig på branchen `losning/holdeplass-11`.
 
 ### 🧭 Ulikt anker per element
 
-> **Bygger på:** holdeplass 9 · **Lærer bort:** hvordan én CSS-regel får ulik verdi per element ·
+> **Bygger på:** holdeplass 8 · **Lærer bort:** hvordan én CSS-regel får ulik verdi per element ·
 > **Tid:** ~20 min
 
-På holdeplass 9 slapp du unna med det implisitte ankeret: popoveren peker på knappen som åpnet
+På holdeplass 8 slapp du unna med det implisitte ankeret: popoveren peker på knappen som åpnet
 den, helt gratis. Men hva om du vil ankre til noe annet — hele raden, for eksempel, så tooltipen
 legger seg under todoen i stedet for under knappen?
 
@@ -1055,7 +1015,7 @@ Vi har valgt den bort. Prisen ser ut som en ekstra knapp — men den er høyere 
 **Checkboxen kan lyve.** Den er ikke koblet til serveren i det hele tatt: `POST /todo/:id/toggle`
 leser aldri feltet, den bare flipper `completed`. Samtidig reagerer CSS-en du skrev på den
 visuelle tilstanden umiddelbart — gjennomstrekingen fra holdeplass 4 slår inn i det du klikker,
-og filteret fra holdeplass 10 kan skjule raden på flekken.
+og filteret fra holdeplass 9 kan skjule raden på flekken.
 
 Prøv selv: huk av en todo, se den bli strøket over, og la være å trykke Toggle. Refresh. Den er
 like uavkrysset som før. Du fikk optimistisk UI gratis, og du fikk ingen garanti for at det
@@ -1135,7 +1095,7 @@ CLAUDE.md         🤖 Spilleregler for Claude Code i dette repoet
 
 Todo-modellen er `{ id, description, completed, createdAt }`, og de fire rutene står listet i
 [🧱 Etappe 1](#-etappe-1--bygg-appen). Malen får i tillegg hjelperen `created(todo)`, som
-formaterer `createdAt` til lesbar dato — den brukes av popoveren på holdeplass 9.
+formaterer `createdAt` til lesbar dato — den brukes av popoveren på holdeplass 8.
 
 > 💡 **En detalj som er gjort for deg:** hver `<li>` har `view-transition-name: todo-<id>`.
 > Navnet må være unikt per element, og det er nettopp derfor id-en er med — noe du får bruk for
