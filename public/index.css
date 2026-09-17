@@ -152,21 +152,7 @@ input[type="checkbox"] {
   animation: fade-out 250ms ease-in;
 }
 
-/* Holdeplass 7: nye todos glir inn */
-.todo {
-  opacity: 1;
-  translate: 0;
-  transition: opacity 300ms ease, translate 300ms ease;
-}
-
-@starting-style {
-  .todo {
-    opacity: 0;
-    translate: 0 -1rem;
-  }
-}
-
-/* Holdeplass 8: dialogen */
+/* Holdeplass 7: dialogen */
 dialog {
   border: none;
   border-radius: 0.75rem;
